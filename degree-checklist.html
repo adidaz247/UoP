@@ -180,6 +180,15 @@
   .mini-pct {
     font-size: 0.72rem;
     color: var(--orange);
+    min-width: 34px;
+    text-align: right;
+  }
+  .progress-row input[type="range"] {
+    flex: 1;
+    max-width: 160px;
+    accent-color: var(--orange);
+    height: 6px;
+    cursor: pointer;
   }
 
   .footer-note {
@@ -232,7 +241,7 @@
   <div id="phases"></div>
 
   <button class="reset-btn" id="resetBtn">Reset all progress</button>
-  <div class="footer-note">Tap the checkbox to mark a course done. Tap anywhere else on a course to log a % progress update. Progress is saved automatically and persists between visits.</div>
+  <div class="footer-note">Tap the checkbox to mark a course done. Drag the slider on any in-progress course to log where you're at. Unchecking a done course brings back the progress it had before, not 100%. Everything saves automatically and persists between visits.</div>
 </div>
 
 <script>
@@ -284,8 +293,10 @@ const COURSES = [
 
 const STORAGE_KEY = "uopeople-checklist-state-v1";
 const PROGRESS_KEY = "uopeople-checklist-progress-v1";
-let state = {};    // { "phase|title": true/false }
-let progress = {}; // { "phase|title": 0-100 }
+const PREV_PROGRESS_KEY = "uopeople-checklist-prevprogress-v1";
+let state = {};        // { "phase|title": true/false }
+let progress = {};     // { "phase|title": 0-100 }
+let prevProgress = {}; // { "phase|title": 0-100 } — progress to restore if a done course gets unchecked
 
 function keyFor(item) { return item.phase + "|" + item.title; }
 
@@ -324,6 +335,12 @@ async function loadState() {
   } catch (e) {
     progress = computeInitialProgress();
   }
+  try {
+    const raw = localStorage.getItem(PREV_PROGRESS_KEY);
+    prevProgress = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    prevProgress = {};
+  }
 }
 
 async function saveState() {
@@ -337,6 +354,14 @@ async function saveState() {
 async function saveProgress() {
   try {
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+  } catch (e) {
+    console.error("Save failed", e);
+  }
+}
+
+async function savePrevProgress() {
+  try {
+    localStorage.setItem(PREV_PROGRESS_KEY, JSON.stringify(prevProgress));
   } catch (e) {
     console.error("Save failed", e);
   }
@@ -379,10 +404,10 @@ function render() {
             <span>${item.meta}</span>
           </div>
           ${item.alt ? `<div class="item-alt">⚡ ${item.alt} — use if faster</div>` : ""}
-          ${(!isDone && pct > 0) ? `
+          ${!isDone ? `
             <div class="progress-row">
-              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:${pct}%"></div></div>
-              <span class="mini-pct">${pct}% in progress</span>
+              <input type="range" min="0" max="100" step="1" value="${pct}" data-role="slider">
+              <span class="mini-pct" data-role="pct-label">${pct}%</span>
             </div>
           ` : ""}
         </div>
@@ -391,10 +416,19 @@ function render() {
         e.stopPropagation();
         toggleItem(item);
       });
-      row.querySelector('[data-role="body"]').addEventListener("click", () => {
-        if (isDone) { toggleItem(item); return; }
-        editProgress(item);
-      });
+      if (isDone) {
+        row.addEventListener("click", () => toggleItem(item));
+      } else {
+        const slider = row.querySelector('[data-role="slider"]');
+        const label = row.querySelector('[data-role="pct-label"]');
+        slider.addEventListener("click", (e) => e.stopPropagation());
+        slider.addEventListener("input", (e) => {
+          label.textContent = e.target.value + "%";
+        });
+        slider.addEventListener("change", (e) => {
+          setProgress(item, parseInt(e.target.value, 10));
+        });
+      }
       phaseDiv.appendChild(row);
     });
 
@@ -406,22 +440,32 @@ function render() {
 
 function toggleItem(item) {
   const k = keyFor(item);
-  state[k] = !state[k];
-  if (state[k]) { progress[k] = 100; saveProgress(); }
+  const wasDone = !!state[k];
+  if (!wasDone) {
+    // Marking done: remember whatever progress it had so unchecking can restore it.
+    prevProgress[k] = progress[k] || 0;
+    progress[k] = 100;
+    state[k] = true;
+  } else {
+    // Unchecking: fall back to the progress it had before, not 100%.
+    state[k] = false;
+    progress[k] = (prevProgress[k] !== undefined) ? prevProgress[k] : 0;
+  }
   saveState();
+  saveProgress();
+  savePrevProgress();
   render();
 }
 
-function editProgress(item) {
+function setProgress(item, val) {
   const k = keyFor(item);
-  const current = progress[k] || 0;
-  const input = prompt(`How far along is "${item.title}"? Enter a percent (0–100), or 100 to mark it done.`, current);
-  if (input === null) return;
-  const val = Math.max(0, Math.min(100, parseInt(input, 10) || 0));
+  val = Math.max(0, Math.min(100, val));
   progress[k] = val;
-  if (val >= 100) { state[k] = true; }
+  state[k] = val >= 100;
+  if (val >= 100) { prevProgress[k] = 0; }
   saveProgress();
   saveState();
+  savePrevProgress();
   render();
 }
 
@@ -450,8 +494,10 @@ document.getElementById("resetBtn").addEventListener("click", async () => {
   if (confirm("Reset all progress back to your original starting point (9 Sophia courses done, rest unchecked)?")) {
     state = computeInitialState();
     progress = computeInitialProgress();
+    prevProgress = {};
     await saveState();
     await saveProgress();
+    await savePrevProgress();
     render();
   }
 });
