@@ -1,0 +1,482 @@
+<title>Credit Ledger</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --border: #e4e0d6;
+    --text: #1c1a17;
+    --muted: #6b6558;
+    --accent-sophia: #2f5fd6;
+    --accent-study: #c96a1f;
+    --accent-uop: #8a6d1f;
+    --accent-uop-bg: #f6ecc9;
+    --good: #1f7a4d;
+    --good-bg: #e4f3ea;
+    --warn-bg: #fbeedd;
+    --warn-border: #e8c98f;
+    --warn-text: #7a5518;
+    --track: #ece8dd;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15130f;
+      --surface: #1e1c17;
+      --border: #343026;
+      --text: #f1ede2;
+      --muted: #a9a190;
+      --accent-sophia: #7fa2ff;
+      --accent-study: #f0975a;
+      --accent-uop: #e6c96a;
+      --accent-uop-bg: #3a3220;
+      --good: #5fd6a0;
+      --good-bg: #1c2f26;
+      --warn-bg: #362b18;
+      --warn-border: #5c4820;
+      --warn-text: #f0cf8e;
+      --track: #2b2820;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15130f;
+    --surface: #1e1c17;
+    --border: #343026;
+    --text: #f1ede2;
+    --muted: #a9a190;
+    --accent-sophia: #7fa2ff;
+    --accent-study: #f0975a;
+    --accent-uop: #e6c96a;
+    --accent-uop-bg: #3a3220;
+    --good: #5fd6a0;
+    --good-bg: #1c2f26;
+    --warn-bg: #362b18;
+    --warn-border: #5c4820;
+    --warn-text: #f0cf8e;
+    --track: #2b2820;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: 1.7rem;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .sub { color: var(--muted); font-size: 0.86rem; margin-bottom: 22px; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stat-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .stat-num { font-size: 1.35rem; font-weight: 600; }
+  .stat-label { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  .bar-bg {
+    background: var(--track);
+    border-radius: 8px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--good);
+    transition: width 0.25s ease;
+  }
+
+  .flag-card {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 10px;
+    padding: 13px 15px;
+    margin-bottom: 22px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--warn-text);
+  }
+  .flag-card .flag-title { font-weight: 600; margin-bottom: 6px; }
+  .flag-card ul { margin: 4px 0 0; padding-left: 18px; }
+  .flag-card li { margin-bottom: 4px; }
+  .flag-card b { color: var(--text); }
+
+  .phase { margin-bottom: 24px; }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot.sophia { background: var(--accent-sophia); }
+  .dot.study { background: var(--accent-study); }
+  .dot.uop { background: var(--accent-uop); }
+
+  .item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  .item.done { background: var(--good-bg); border-color: var(--good); }
+  .item-row { display: flex; align-items: flex-start; gap: 12px; }
+
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--muted);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--surface);
+  }
+  .item.done .checkbox { background: var(--good); border-color: var(--good); }
+  .checkbox svg { width: 12px; height: 12px; display: none; stroke: var(--surface); }
+  .item.done .checkbox svg { display: block; }
+
+  .item-body { flex: 1; min-width: 0; }
+  .item-title { font-size: 0.93rem; font-weight: 600; }
+  .item.done .item-title { color: var(--muted); text-decoration: line-through; }
+  .item-meta {
+    font-size: 0.76rem;
+    color: var(--muted);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+  }
+  .badge {
+    font-size: 0.68rem;
+    padding: 1px 7px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+    font-family: "IBM Plex Mono", monospace;
+  }
+  .item-alt {
+    font-size: 0.74rem;
+    color: var(--accent-study);
+    margin-top: 5px;
+  }
+
+  .progress-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .progress-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 4px;
+    background: var(--track);
+    outline: none;
+  }
+  .progress-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--accent-study);
+    cursor: pointer;
+    border: 2px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--accent-study);
+  }
+  .progress-slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--accent-study);
+    cursor: pointer;
+    border: 2px solid var(--surface);
+  }
+  .progress-pct {
+    font-size: 0.78rem;
+    color: var(--accent-study);
+    width: 40px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .sync-note {
+    font-size: 0.74rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 8px;
+  }
+  .sync-note.err { color: var(--warn-text); }
+
+  .footer-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-top: 28px;
+    line-height: 1.5;
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="wrap">
+  <h1>Credit Ledger</h1>
+  <div class="sub">UoPeople B.S. Computer Science — Sophia.com → Study.com → UoPeople. Tap a course to update it.</div>
+
+  <div class="stat-row">
+    <div class="stat-tile">
+      <div class="stat-num mono" id="doneCount">—</div>
+      <div class="stat-label">of 36 courses done</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-num mono" id="pctVal">—</div>
+      <div class="stat-label">complete</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-num mono" id="remainingCost">—</div>
+      <div class="stat-label">remaining cost</div>
+    </div>
+  </div>
+
+  <div class="bar-bg"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+
+  <div class="flag-card">
+    <div class="flag-title">Confirm with UoPeople advisor before finishing the plan</div>
+    <ul>
+      <li><b>Transfer cap:</b> default is 50% of the degree (60 credits / 20 courses). The 75% ceiling (90 credits / 30 courses) needs special approval, not automatic. This plan transfers 23 courses (69 credits), above the default.</li>
+      <li><b>Course count gap:</b> the current catalog requires 40 courses (120 credits) for the CS B.S. This plan totals 36 courses (108 credits), a 4-course shortfall to sort out with your advisor.</li>
+      <li><b>Fees:</b> UoPeople assessment fee is $180 per course per the current catalog.</li>
+    </ul>
+  </div>
+
+  <div id="phases"></div>
+
+  <div class="sync-note" id="syncNote">Loading your saved progress…</div>
+  <div class="footer-note">Tap the checkbox to mark a course done. Drag the slider on an unfinished course to log where you are. Changes save automatically and sync across any device where you open this page.</div>
+</div>
+
+<script>
+const CATALOG = [
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"College Algebra", code:"MATH 1201", meta:"Completed", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"English Composition 2", code:"ENGL 1102", meta:"Completed", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming Fundamentals + 1", code:"CS 1101/1102", meta:"Completed", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming 2", code:"CS 1103", meta:"Completed", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Databases 1", code:"CS 2203", meta:"Completed", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Public Speaking (Social Sci GE)", code:"Gen Ed", meta:"Completed", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"U.S. Government (Social Sci GE)", code:"Gen Ed", meta:"Completed", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Critical Thinking (Humanities GE)", code:"Gen Ed", meta:"Completed", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Project Management (Gen Elective)", code:"Gen Ed", meta:"Completed", cost:0},
+
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Statistics", code:"MATH 1280", meta:"Month 1 · $79", cost:79, alt:"Study.com: Statistics 101 (Principles of Statistics)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Ethics (Values GE)", code:"Gen Ed", meta:"Month 1 · incl.", cost:0, alt:"Study.com: Philosophy 103 (Ethics – Theory & Practice)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Psychology (Social Sci GE)", code:"Gen Ed", meta:"Month 2 · $79", cost:79, alt:"Study.com: Psychology 101 (Intro to Psychology)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Environmental Science (Nat Sci GE)", code:"Gen Ed", meta:"Month 2 · incl.", cost:0, alt:"Study.com: Environmental Science 101 (Environment and Humanity)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Art History I (Humanities GE 2)", code:"Gen Ed", meta:"Month 3 · $79", cost:79, alt:"Study.com: Art 103 (History of Western Art I)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Communications and Networking", code:"CS 2204", meta:"Month 3 · incl.", cost:0, alt:"Study.com: CS 108 (Introduction to Networking)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Web Programming 1", code:"CS 2205", meta:"Month 4 · $79", cost:79, alt:"Study.com: CS 104 (Intro to Web Development)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Calculus I", code:"MATH 1211", meta:"Month 4 · incl.", cost:0, alt:"Study.com: Math 104 (Calculus)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Civilization Studies GE (Art History II)", code:"Gen Ed", meta:"Month 5 · $79", cost:79, alt:"Study.com: Art 104 (History of Western Art II)"},
+
+  {phase:"Study.com — After Sophia", platform:"study", title:"Discrete Mathematics", code:"MATH 1302", meta:"Month 6 · $95", cost:95},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Digital Electronics & Computer Architecture", code:"CS 1105", meta:"Month 6 · incl.", cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Month 7 · $95", cost:95},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Month 7 · incl.", cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Operating Systems 1", code:"CS 2301", meta:"Month 8 · $95", cost:95},
+
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Online Education Strategies", code:"UNIV 1001", meta:"Term 1 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Software Engineering 1", code:"CS 2401", meta:"Term 1 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Web Programming 2", code:"CS 3305", meta:"Term 2 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Operating Systems 2", code:"CS 3307", meta:"Term 2 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Comparative Programming Languages", code:"CS 4402", meta:"Term 3 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Data Mining and Machine Learning", code:"CS 4407", meta:"Term 3 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Term 4 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Analysis of Algorithms", code:"CS 3304", meta:"Term 4 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Advanced Networking & Security", code:"CS 4404", meta:"Term 5 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Big Data", code:"CS 3440", meta:"Term 5 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Term 6 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Software Engineering 2", code:"CS 4403", meta:"Term 6 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Mobile Applications", code:"CS 4405", meta:"Term 7 · $180", cost:180},
+];
+
+function slugify(title) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+CATALOG.forEach(c => { c.id = slugify(c.title); });
+
+let recordsById = {}; // id -> {done, progress}
+let db = null;
+let writeTimers = {};
+
+function setSyncNote(text, isErr) {
+  const el = document.getElementById("syncNote");
+  el.textContent = text;
+  el.className = "sync-note" + (isErr ? " err" : "");
+}
+
+function render() {
+  const container = document.getElementById("phases");
+  container.innerHTML = "";
+
+  const phaseOrder = [];
+  CATALOG.forEach(c => { if (!phaseOrder.includes(c.phase)) phaseOrder.push(c.phase); });
+
+  let doneCount = 0;
+  let remainingCost = 0;
+
+  phaseOrder.forEach(phaseName => {
+    const items = CATALOG.filter(c => c.phase === phaseName);
+    const platform = items[0].platform;
+
+    const phaseDiv = document.createElement("div");
+    phaseDiv.className = "phase";
+    const header = document.createElement("div");
+    header.className = "phase-header";
+    header.innerHTML = `<span class="dot ${platform}"></span>${phaseName}`;
+    phaseDiv.appendChild(header);
+
+    items.forEach(item => {
+      const rec = recordsById[item.id] || { done: false, progress: 0 };
+      const isDone = !!rec.done;
+      const pct = rec.progress || 0;
+      if (isDone) doneCount++;
+      if (!isDone) remainingCost += item.cost;
+
+      const row = document.createElement("div");
+      row.className = "item" + (isDone ? " done" : "");
+      row.innerHTML = `
+        <div class="item-row">
+          <div class="checkbox" data-action="toggle" data-id="${item.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div class="item-body">
+            <div class="item-title">${item.title}</div>
+            <div class="item-meta">
+              <span class="badge">${item.code}</span>
+              <span>${item.meta}</span>
+            </div>
+            ${item.alt ? `<div class="item-alt">Study.com alt: ${item.alt.replace(/^Study\\.com:\\s*/, "")} — use if faster</div>` : ""}
+            ${!isDone ? `
+              <div class="progress-controls">
+                <input type="range" min="0" max="100" step="1" value="${pct}" class="progress-slider" data-action="slide" data-id="${item.id}">
+                <span class="progress-pct mono" data-pct-for="${item.id}">${pct}%</span>
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `;
+      phaseDiv.appendChild(row);
+    });
+
+    container.appendChild(phaseDiv);
+  });
+
+  container.querySelectorAll('[data-action="toggle"]').forEach(el => {
+    el.addEventListener("click", () => toggleDone(el.dataset.id));
+  });
+  container.querySelectorAll('[data-action="slide"]').forEach(el => {
+    el.addEventListener("input", () => {
+      const pctLabel = container.querySelector(`[data-pct-for="${el.dataset.id}"]`);
+      if (pctLabel) pctLabel.textContent = el.value + "%";
+    });
+    el.addEventListener("change", () => setProgress(el.dataset.id, parseInt(el.value, 10)));
+  });
+
+  const total = CATALOG.length;
+  const pct = total ? Math.round((doneCount / total) * 100) : 0;
+  document.getElementById("doneCount").textContent = doneCount + "/" + total;
+  document.getElementById("pctVal").textContent = pct + "%";
+  document.getElementById("barFill").style.width = pct + "%";
+  document.getElementById("remainingCost").textContent = "$" + remainingCost.toLocaleString();
+}
+
+async function toggleDone(id) {
+  if (!db) return;
+  const current = recordsById[id] || { done: false, progress: 0 };
+  const nextDone = !current.done;
+  const nextProgress = nextDone ? 100 : current.progress || 0;
+  recordsById[id] = { done: nextDone, progress: nextProgress };
+  render();
+  try {
+    await db.doc("courses/" + id).set({ done: nextDone, progress: nextProgress, updatedAt: new Date().toISOString() });
+    setSyncNote("Saved.", false);
+  } catch (e) {
+    setSyncNote("Couldn't save that change (" + (e && e.code ? e.code : "error") + "). Try again.", true);
+  }
+}
+
+async function setProgress(id, val) {
+  if (!db) return;
+  const clamped = Math.max(0, Math.min(100, val));
+  const done = clamped >= 100;
+  recordsById[id] = { done, progress: clamped };
+  render();
+  try {
+    await db.doc("courses/" + id).set({ done, progress: clamped, updatedAt: new Date().toISOString() });
+    setSyncNote("Saved.", false);
+  } catch (e) {
+    setSyncNote("Couldn't save that change (" + (e && e.code ? e.code : "error") + "). Try again.", true);
+  }
+}
+
+(async function init() {
+  render();
+  try {
+    db = await claude.use("db");
+  } catch (e) {
+    db = null;
+  }
+  if (!db) {
+    setSyncNote("Live sync isn't available in this view — changes won't be saved.", true);
+    return;
+  }
+  db.collection("courses").onSnapshot(
+    (snap) => {
+      const next = {};
+      snap.docs.forEach(d => {
+        const data = d.data() || {};
+        next[d.id] = { done: !!data.done, progress: typeof data.progress === "number" ? data.progress : 0 };
+      });
+      recordsById = next;
+      render();
+      setSyncNote("Synced.", false);
+    },
+    (err) => {
+      setSyncNote("Sync error (" + err.code + "). Your last saved state is shown.", true);
+    }
+  );
+})();
+</script>
