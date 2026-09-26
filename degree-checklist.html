@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UoPeople CS Degree Checklist</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --card: #171a21;
+    --border: #262b36;
+    --text: #e8eaed;
+    --muted: #9aa3b2;
+    --accent: #5b8def;
+    --green: #3ddc97;
+    --orange: #f5a623;
+    --yellow: #e0c341;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px 16px 80px;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  h1 { font-size: 1.4rem; margin-bottom: 4px; }
+  .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+
+  .progress-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+  }
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .progress-top .count { font-size: 1.6rem; font-weight: 700; }
+  .progress-top .label { color: var(--muted); font-size: 0.85rem; }
+  .bar-bg {
+    background: #22262f;
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    transition: width 0.3s ease;
+  }
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .flag-card {
+    background: #241c0f;
+    border: 1px solid #4a3a17;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 22px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  .flag-card .flag-title {
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  .flag-card ul { margin: 4px 0 0; padding-left: 18px; color: var(--muted); }
+  .flag-card li { margin-bottom: 4px; }
+  .flag-card b { color: var(--text); }
+
+  .phase {
+    margin-bottom: 22px;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .dot.sophia { background: var(--accent); }
+  .dot.study { background: var(--orange); }
+  .dot.uop { background: var(--yellow); }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .item:hover { border-color: #3a4150; }
+  .item.done { background: #14201b; border-color: #1f3a2c; }
+
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid #454c5c;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .item.done .checkbox {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .checkbox svg { width: 12px; height: 12px; display: none; }
+  .item.done .checkbox svg { display: block; }
+
+  .item-body { flex: 1; min-width: 0; }
+  .item-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .item.done .item-title { color: var(--muted); text-decoration: line-through; }
+  .item-meta {
+    font-size: 0.76rem;
+    color: var(--muted);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 0.7rem;
+    padding: 1px 7px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .item-alt {
+    font-size: 0.74rem;
+    color: var(--orange);
+    margin-top: 4px;
+  }
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .mini-bar-bg {
+    flex: 1;
+    max-width: 140px;
+    height: 6px;
+    background: #22262f;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .mini-bar-fill {
+    height: 100%;
+    background: var(--orange);
+  }
+  .mini-pct {
+    font-size: 0.72rem;
+    color: var(--orange);
+  }
+
+  .footer-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-top: 28px;
+    line-height: 1.5;
+  }
+  .reset-btn {
+    display: block;
+    margin: 18px auto 0;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+  .reset-btn:hover { border-color: #5c2c2c; color: #e88; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>UoPeople B.S. Computer Science — Degree Checklist</h1>
+  <div class="sub">Sophia.com → Study.com → UoPeople · tap any course to mark it done</div>
+
+  <div class="progress-card">
+    <div class="progress-top">
+      <div><span class="count" id="doneCount">0</span> <span class="label">/ <span id="totalCount">0</span> courses complete</span></div>
+      <div class="label" id="pct">0%</div>
+    </div>
+    <div class="bar-bg"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+    <div class="stats-row">
+      <span id="remainingCost">Remaining cost: —</span>
+      <span id="remainingPhaseInfo">—</span>
+    </div>
+  </div>
+
+  <div class="flag-card">
+    <div class="flag-title">⚠️ Confirm with UoPeople advisor before finishing the plan</div>
+    <ul>
+      <li><b>Transfer cap:</b> default is 50% of the degree (60 credits / 20 courses). The 75% ceiling (90 credits / 30 courses) needs special approval — not automatic. This plan transfers 23 courses (69 credits), above the default.</li>
+      <li><b>Course count gap:</b> current catalog requires 40 courses (120 credits) for the CS B.S. This plan totals 36 courses (108 credits) — a 4-course shortfall to sort out with your advisor.</li>
+      <li><b>Fees updated:</b> UoPeople assessment fee is $180/course per the current catalog (this checklist reflects that; it was originally budgeted at $160).</li>
+    </ul>
+  </div>
+
+  <div id="phases"></div>
+
+  <button class="reset-btn" id="resetBtn">Reset all progress</button>
+  <div class="footer-note">Tap the checkbox to mark a course done. Tap anywhere else on a course to log a % progress update. Progress is saved automatically and persists between visits.</div>
+</div>
+
+<script>
+const COURSES = [
+  // Sophia - already completed
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"College Algebra", code:"MATH 1201", meta:"Completed · $0", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"English Composition 2", code:"ENGL 1102", meta:"Completed · $0", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming Fundamentals + 1", code:"CS 1101/1102", meta:"Completed · $0", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming 2", code:"CS 1103", meta:"Completed · $0", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Databases 1", code:"CS 2203", meta:"Completed · $0", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Public Speaking (Social Sci GE)", code:"Gen Ed", meta:"Completed · $0", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"U.S. Government (Social Sci GE)", code:"Gen Ed", meta:"Completed · $0", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Critical Thinking (Humanities GE)", code:"Gen Ed", meta:"Completed · $0", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Project Management (Gen Elective)", code:"Gen Ed", meta:"Completed · $0", done:true, cost:0},
+
+  // Sophia - next steps
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Statistics", code:"MATH 1280", meta:"Month 1 · $79", done:true, cost:79, alt:"Study.com: Statistics 101 (Principles of Statistics)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Ethics (Values GE)", code:"Gen Ed", meta:"Month 1 · incl.", done:false, cost:0, alt:"Study.com: Philosophy 103 (Ethics – Theory & Practice)", startProgress:81},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Psychology (Social Sci GE)", code:"Gen Ed", meta:"Month 2 · $79", done:false, cost:79, alt:"Study.com: Psychology 101 (Intro to Psychology)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Environmental Science (Nat Sci GE)", code:"Gen Ed", meta:"Month 2 · incl.", done:false, cost:0, alt:"Study.com: Environmental Science 101 (Environment and Humanity)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Art History I (Humanities GE 2)", code:"Gen Ed", meta:"Month 3 · $79", done:false, cost:79, alt:"Study.com: Art 103 (History of Western Art I)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Communications and Networking", code:"CS 2204", meta:"Month 3 · incl.", done:false, cost:0, alt:"Study.com: CS 108 (Introduction to Networking)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Web Programming 1", code:"CS 2205", meta:"Month 4 · $79", done:true, cost:79, alt:"Study.com: CS 104 (Intro to Web Development)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Calculus I", code:"MATH 1211", meta:"Month 4 · incl. · via Study.com (Math 104)", done:true, cost:0, alt:"Study.com: Math 104 (Calculus)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Civilization Studies GE (Art History II)", code:"Gen Ed", meta:"Month 5 · $79", done:false, cost:79, alt:"Study.com: Art 104 (History of Western Art II)"},
+
+  // Study.com
+  {phase:"Study.com — After Sophia", platform:"study", title:"Discrete Mathematics", code:"MATH 1302", meta:"Month 6 · $95", done:false, cost:95},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Digital Electronics & Computer Architecture", code:"CS 1105", meta:"Month 6 · incl.", done:false, cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Month 7 · $95", done:false, cost:95},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Month 7 · incl.", done:false, cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Operating Systems 1", code:"CS 2301", meta:"Month 8 · $95", done:false, cost:95},
+
+  // UoPeople
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Online Education Strategies", code:"UNIV 1001", meta:"Term 1 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Software Engineering 1", code:"CS 2401", meta:"Term 1 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Web Programming 2", code:"CS 3305", meta:"Term 2 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Operating Systems 2", code:"CS 3307", meta:"Term 2 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Comparative Programming Languages", code:"CS 4402", meta:"Term 3 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Data Mining and Machine Learning", code:"CS 4407", meta:"Term 3 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Term 4 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Analysis of Algorithms", code:"CS 3304", meta:"Term 4 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Advanced Networking & Security", code:"CS 4404", meta:"Term 5 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Big Data", code:"CS 3440", meta:"Term 5 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Term 6 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Software Engineering 2", code:"CS 4403", meta:"Term 6 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Mobile Applications", code:"CS 4405", meta:"Term 7 · $180", done:false, cost:180},
+];
+
+const STORAGE_KEY = "uopeople-checklist-state-v1";
+const PROGRESS_KEY = "uopeople-checklist-progress-v1";
+let state = {};    // { "phase|title": true/false }
+let progress = {}; // { "phase|title": 0-100 }
+
+function keyFor(item) { return item.phase + "|" + item.title; }
+
+function computeInitialState() {
+  const s = {};
+  COURSES.forEach(c => { s[keyFor(c)] = c.done; });
+  return s;
+}
+
+function computeInitialProgress() {
+  const p = {};
+  COURSES.forEach(c => { if (c.startProgress) p[keyFor(c)] = c.startProgress; });
+  return p;
+}
+
+async function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      state = Object.assign(computeInitialState(), saved);
+    } else {
+      state = computeInitialState();
+    }
+  } catch (e) {
+    state = computeInitialState();
+  }
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      progress = Object.assign(computeInitialProgress(), saved);
+    } else {
+      progress = computeInitialProgress();
+    }
+  } catch (e) {
+    progress = computeInitialProgress();
+  }
+}
+
+async function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.error("Save failed", e);
+  }
+}
+
+async function saveProgress() {
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+  } catch (e) {
+    console.error("Save failed", e);
+  }
+}
+
+function render() {
+  const container = document.getElementById("phases");
+  container.innerHTML = "";
+
+  const phaseOrder = [];
+  COURSES.forEach(c => { if (!phaseOrder.includes(c.phase)) phaseOrder.push(c.phase); });
+
+  phaseOrder.forEach(phaseName => {
+    const items = COURSES.filter(c => c.phase === phaseName);
+    const platform = items[0].platform;
+
+    const phaseDiv = document.createElement("div");
+    phaseDiv.className = "phase";
+
+    const header = document.createElement("div");
+    header.className = "phase-header";
+    header.innerHTML = `<span class="dot ${platform}"></span>${phaseName}`;
+    phaseDiv.appendChild(header);
+
+    items.forEach(item => {
+      const isDone = !!state[keyFor(item)];
+      const pct = progress[keyFor(item)] || 0;
+      const row = document.createElement("div");
+      row.className = "item" + (isDone ? " done" : "");
+      row.innerHTML = `
+        <div class="checkbox" data-role="checkbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0f1115" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="item-body" data-role="body">
+          <div class="item-title">${item.title}</div>
+          <div class="item-meta">
+            <span class="badge">${item.code}</span>
+            <span>${item.meta}</span>
+          </div>
+          ${item.alt ? `<div class="item-alt">⚡ ${item.alt} — use if faster</div>` : ""}
+          ${(!isDone && pct > 0) ? `
+            <div class="progress-row">
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:${pct}%"></div></div>
+              <span class="mini-pct">${pct}% in progress</span>
+            </div>
+          ` : ""}
+        </div>
+      `;
+      row.querySelector('[data-role="checkbox"]').addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleItem(item);
+      });
+      row.querySelector('[data-role="body"]').addEventListener("click", () => {
+        if (isDone) { toggleItem(item); return; }
+        editProgress(item);
+      });
+      phaseDiv.appendChild(row);
+    });
+
+    container.appendChild(phaseDiv);
+  });
+
+  updateStats();
+}
+
+function toggleItem(item) {
+  const k = keyFor(item);
+  state[k] = !state[k];
+  if (state[k]) { progress[k] = 100; saveProgress(); }
+  saveState();
+  render();
+}
+
+function editProgress(item) {
+  const k = keyFor(item);
+  const current = progress[k] || 0;
+  const input = prompt(`How far along is "${item.title}"? Enter a percent (0–100), or 100 to mark it done.`, current);
+  if (input === null) return;
+  const val = Math.max(0, Math.min(100, parseInt(input, 10) || 0));
+  progress[k] = val;
+  if (val >= 100) { state[k] = true; }
+  saveProgress();
+  saveState();
+  render();
+}
+
+function updateStats() {
+  const total = COURSES.length;
+  const doneCount = COURSES.filter(c => state[keyFor(c)]).length;
+  const pct = total ? Math.round((doneCount / total) * 100) : 0;
+
+  document.getElementById("doneCount").textContent = doneCount;
+  document.getElementById("totalCount").textContent = total;
+  document.getElementById("pct").textContent = pct + "%";
+  document.getElementById("barFill").style.width = pct + "%";
+
+  const remainingCost = COURSES
+    .filter(c => !state[keyFor(c)])
+    .reduce((sum, c) => sum + c.cost, 0);
+  document.getElementById("remainingCost").textContent =
+    "Remaining cost: ~$" + remainingCost.toLocaleString();
+
+  const remainingCourses = total - doneCount;
+  document.getElementById("remainingPhaseInfo").textContent =
+    remainingCourses + " course" + (remainingCourses === 1 ? "" : "s") + " left";
+}
+
+document.getElementById("resetBtn").addEventListener("click", async () => {
+  if (confirm("Reset all progress back to your original starting point (9 Sophia courses done, rest unchecked)?")) {
+    state = computeInitialState();
+    progress = computeInitialProgress();
+    await saveState();
+    await saveProgress();
+    render();
+  }
+});
+
+(async function init() {
+  await loadState();
+  render();
+})();
+</script>
+</body>
+</html>
