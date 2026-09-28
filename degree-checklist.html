@@ -190,6 +190,25 @@
     height: 6px;
     cursor: pointer;
   }
+  .platform-choice {
+    display: flex;
+    gap: 14px;
+    margin-top: 6px;
+    font-size: 0.74rem;
+    color: var(--muted);
+  }
+  .platform-choice label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .platform-choice input[type="checkbox"] {
+    width: 13px;
+    height: 13px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
 
   .footer-note {
     text-align: center;
@@ -294,9 +313,11 @@ const COURSES = [
 const STORAGE_KEY = "uopeople-checklist-state-v1";
 const PROGRESS_KEY = "uopeople-checklist-progress-v1";
 const PREV_PROGRESS_KEY = "uopeople-checklist-prevprogress-v1";
-let state = {};        // { "phase|title": true/false }
-let progress = {};     // { "phase|title": 0-100 }
-let prevProgress = {}; // { "phase|title": 0-100 } — progress to restore if a done course gets unchecked
+const PLATFORM_KEY = "uopeople-checklist-platformchoice-v1";
+let state = {};          // { "phase|title": true/false }
+let progress = {};       // { "phase|title": 0-100 }
+let prevProgress = {};   // { "phase|title": 0-100 } — progress to restore if a done course gets unchecked
+let platformChoice = {}; // { "phase|title": "sophia" | "study" } — which platform you're actually working the course on
 
 function keyFor(item) { return item.phase + "|" + item.title; }
 
@@ -341,6 +362,12 @@ async function loadState() {
   } catch (e) {
     prevProgress = {};
   }
+  try {
+    const raw = localStorage.getItem(PLATFORM_KEY);
+    platformChoice = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    platformChoice = {};
+  }
 }
 
 async function saveState() {
@@ -367,6 +394,20 @@ async function savePrevProgress() {
   }
 }
 
+async function savePlatformChoice() {
+  try {
+    localStorage.setItem(PLATFORM_KEY, JSON.stringify(platformChoice));
+  } catch (e) {
+    console.error("Save failed", e);
+  }
+}
+
+function setPlatformChoice(item, val) {
+  const k = keyFor(item);
+  if (val) { platformChoice[k] = val; } else { delete platformChoice[k]; }
+  savePlatformChoice();
+}
+
 function render() {
   const container = document.getElementById("phases");
   container.innerHTML = "";
@@ -389,6 +430,7 @@ function render() {
     items.forEach(item => {
       const isDone = !!state[keyFor(item)];
       const pct = progress[keyFor(item)] || 0;
+      const chosenPlatform = platformChoice[keyFor(item)] || null;
       const row = document.createElement("div");
       row.className = "item" + (isDone ? " done" : "");
       row.innerHTML = `
@@ -404,6 +446,12 @@ function render() {
             <span>${item.meta}</span>
           </div>
           ${item.alt ? `<div class="item-alt">⚡ ${item.alt} — use if faster</div>` : ""}
+          ${item.alt ? `
+            <div class="platform-choice" data-role="platform-choice">
+              <label><input type="checkbox" data-role="plat-sophia" ${chosenPlatform === "sophia" ? "checked" : ""}> Working on Sophia</label>
+              <label><input type="checkbox" data-role="plat-study" ${chosenPlatform === "study" ? "checked" : ""}> Working on Study.com</label>
+            </div>
+          ` : ""}
           ${!isDone ? `
             <div class="progress-row">
               <input type="range" min="0" max="100" step="1" value="${pct}" data-role="slider">
@@ -427,6 +475,19 @@ function render() {
         });
         slider.addEventListener("change", (e) => {
           setProgress(item, parseInt(e.target.value, 10));
+        });
+      }
+      if (item.alt) {
+        const sophiaCb = row.querySelector('[data-role="plat-sophia"]');
+        const studyCb = row.querySelector('[data-role="plat-study"]');
+        [sophiaCb, studyCb].forEach(cb => cb.addEventListener("click", (e) => e.stopPropagation()));
+        sophiaCb.addEventListener("change", () => {
+          if (sophiaCb.checked) { studyCb.checked = false; setPlatformChoice(item, "sophia"); }
+          else { setPlatformChoice(item, null); }
+        });
+        studyCb.addEventListener("change", () => {
+          if (studyCb.checked) { sophiaCb.checked = false; setPlatformChoice(item, "study"); }
+          else { setPlatformChoice(item, null); }
         });
       }
       phaseDiv.appendChild(row);
@@ -495,9 +556,11 @@ document.getElementById("resetBtn").addEventListener("click", async () => {
     state = computeInitialState();
     progress = computeInitialProgress();
     prevProgress = {};
+    platformChoice = {};
     await saveState();
     await saveProgress();
     await savePrevProgress();
+    await savePlatformChoice();
     render();
   }
 });
