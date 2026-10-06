@@ -1,0 +1,520 @@
+<title>TN Ready Jobs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: border-crossing paperwork. Sticky header with tabs, filter column beside a list of job "entry cards", each carrying a stamped TN category. */
+:root {
+  --bg: #f3f6f6; --surface: #ffffff; --fg: #14262b; --muted: #576a6e; --line: #d6dfe0;
+  --accent: #0d6a6f; --accent-ink: #ffffff; --stamp: #b3263a; --check: #8a5a00; --soft: #e6efef;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e181a; --surface: #152429; --fg: #e2ebeb; --muted: #95a8ab; --line: #27393d;
+  --accent: #52b5b8; --accent-ink: #062022; --stamp: #f07383; --check: #e0b45c; --soft: #1b2f34; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e181a; --surface: #152429; --fg: #e2ebeb; --muted: #95a8ab; --line: #27393d;
+  --accent: #52b5b8; --accent-ink: #062022; --stamp: #f07383; --check: #e0b45c; --soft: #1b2f34; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 16px/1.5 var(--f-body); }
+a { color: var(--accent) }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px }
+
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line) }
+header.top .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding-block: 12px }
+.brand { font: 800 1.25rem/1 var(--f-display); letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px }
+.brand .seal { font: 600 0.7rem/1 var(--f-mono); border: 2px solid var(--stamp); color: var(--stamp); padding: 4px 6px; border-radius: 4px; transform: rotate(-4deg) }
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap }
+nav.tabs button { font: 600 0.95rem var(--f-body); background: none; border: 0; color: var(--muted); padding: 8px 12px; border-radius: 6px; cursor: pointer }
+nav.tabs button[aria-selected="true"] { color: var(--fg); background: var(--soft) }
+
+.intro { padding-block: 28px 8px }
+.intro h1 { font: 800 clamp(1.6rem, 4vw, 2.4rem)/1.1 var(--f-display); margin: 0 0 8px; text-wrap: balance; max-width: 22ch }
+.intro p { margin: 0; color: var(--muted); max-width: 65ch }
+
+.search { display: grid; grid-template-columns: 2fr 1.3fr auto; gap: 8px; padding-block: 16px }
+.search input, .search select, form input, form select, form textarea {
+  font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; width: 100%; min-width: 0 }
+.btn { font: 600 0.95rem var(--f-body); background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 6px; padding: 10px 16px; cursor: pointer; white-space: nowrap }
+.btn.ghost { background: none; color: var(--accent); border: 1px solid var(--line) }
+
+.board { display: grid; grid-template-columns: 240px 1fr; gap: 24px; padding-block: 8px 48px }
+aside.filters { display: flex; flex-direction: column; gap: 20px; align-self: start; position: sticky; top: 76px }
+aside h3 { font: 700 0.75rem var(--f-display); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px }
+aside label { display: flex; gap: 8px; align-items: baseline; font-size: 0.95rem; padding: 3px 0; cursor: pointer }
+aside label .n { margin-left: auto; font: 0.8rem var(--f-mono); color: var(--muted) }
+.results { min-width: 0; display: flex; flex-direction: column; gap: 12px }
+.meta-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 0.9rem }
+.meta-row select { font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px }
+
+.job { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; display: grid; grid-template-columns: 1fr auto; gap: 6px 16px }
+.job h2 { font: 700 1.08rem/1.3 var(--f-display); margin: 0 }
+.job h2 a { color: var(--fg); text-decoration: none }
+.job h2 a:hover { color: var(--accent); text-decoration: underline }
+.job .co { font-weight: 600 }
+.job .where { color: var(--muted) }
+.job .pay { font: 600 0.9rem var(--f-mono); font-variant-numeric: tabular-nums }
+.job .side { grid-row: 1 / span 3; grid-column: 2; display: flex; flex-direction: column; align-items: flex-end; gap: 8px }
+.job .foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 0.85rem; color: var(--muted); margin-top: 4px }
+.stamp { font: 600 0.72rem/1.2 var(--f-mono); text-transform: uppercase; letter-spacing: 0.04em; border: 1.5px solid var(--stamp); color: var(--stamp); padding: 3px 7px; border-radius: 3px; white-space: nowrap }
+.stamp.check { border-color: var(--check); color: var(--check); border-style: dashed }
+.pill { font-size: 0.78rem; background: var(--soft); padding: 2px 8px; border-radius: 99px; color: var(--fg) }
+.save { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 6px; padding: 4px 10px; font: 600 0.8rem var(--f-body); cursor: pointer }
+.save[aria-pressed="true"] { color: var(--accent); border-color: var(--accent) }
+.empty { padding: 32px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 8px }
+
+section.page { padding-block: 24px 56px }
+.cols { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px }
+.cols > * { min-width: 0 }
+.prose h2 { font: 800 1.5rem/1.2 var(--f-display); margin: 0 0 12px; text-wrap: balance }
+.prose h3 { font: 700 1.05rem var(--f-display); margin: 20px 0 6px }
+.prose p, .prose li { max-width: 65ch }
+.prose ul { padding-left: 1.2em }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px }
+form { display: grid; gap: 12px }
+form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+form label { display: grid; gap: 4px; font-size: 0.88rem; font-weight: 600 }
+.note { font-size: 0.85rem; color: var(--muted) }
+.status { font-size: 0.9rem; min-height: 1.4em }
+.status.ok { color: var(--accent) } .status.err { color: var(--stamp) }
+.tbl-wrap { overflow-x: auto }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+th { font: 700 0.75rem var(--f-display); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted) }
+td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; text-align: right }
+.cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 12px }
+.cat { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; background: var(--surface) }
+.cat b { display: block; font-family: var(--f-display) }
+.cat span { font-size: 0.85rem; color: var(--muted) }
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; padding-block: 20px 32px }
+
+@media (max-width: 820px) {
+  .board, .cols { grid-template-columns: 1fr }
+  aside.filters { position: static; flex-direction: row; flex-wrap: wrap; gap: 16px }
+  aside.filters > div { flex: 1 1 200px }
+  .search { grid-template-columns: 1fr }
+  form .row { grid-template-columns: 1fr }
+  .job { grid-template-columns: 1fr }
+  .job .side { grid-row: auto; grid-column: 1; flex-direction: row; align-items: center; justify-content: flex-start }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><span class="seal">TN</span> TN Ready Jobs</div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" id="tab-jobs" aria-selected="true" data-tab="jobs">Find jobs</button>
+      <button role="tab" id="tab-employers" aria-selected="false" data-tab="employers">For employers</button>
+      <button role="tab" id="tab-talent" aria-selected="false" data-tab="talent">Join talent list</button>
+      <button role="tab" id="tab-about" aria-selected="false" data-tab="about">TN basics</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section data-page="jobs">
+  <div class="wrap intro">
+    <h1>Jobs for Canadian and Mexican professionals on TN status</h1>
+    <p>Every listing is at an employer that files H-1B Labor Condition Applications with the U.S. Department of Labor, or was posted by an employer who marked it open to sponsorship. Each one is tagged with the USMCA Appendix 1603.D.1 category it most likely fits.</p>
+  </div>
+  <div class="wrap">
+    <form class="search" id="searchForm" role="search">
+      <input id="q" type="search" placeholder="Title, skill or company" aria-label="Keyword">
+      <input id="loc" type="search" placeholder="City or state" aria-label="Location">
+      <button class="btn" type="submit">Search</button>
+    </form>
+  </div>
+  <div class="wrap board">
+    <aside class="filters" aria-label="Filters">
+      <div><h3>TN category</h3><div id="fCat"></div></div>
+      <div><h3>Fit</h3><div id="fFit"></div></div>
+      <div><h3>Employer</h3><div id="fCo"></div></div>
+      <div><h3>Other</h3>
+        <label><input type="checkbox" id="fPay"> Salary listed</label>
+        <label><input type="checkbox" id="fSaved"> Saved only</label>
+      </div>
+    </aside>
+    <div class="results">
+      <div class="meta-row"><span id="count"></span>
+        <label>Sort <select id="sort"><option value="date">Newest</option><option value="pay">Highest pay</option><option value="co">Employer A to Z</option></select></label>
+      </div>
+      <div id="list"></div>
+    </div>
+  </div>
+</section>
+
+<section data-page="employers" hidden>
+  <div class="wrap page cols">
+    <div class="prose">
+      <h2>Hire from Canada and Mexico without the H-1B lottery</h2>
+      <p>TN status has no annual cap and no lottery. A Canadian citizen can apply at a U.S. port of entry or preclearance airport with your offer letter, and decisions are usually made the same day. A Mexican citizen applies for a TN visa at a U.S. consulate first. Approval covers up to three years and can be renewed.</p>
+      <h3>What your offer letter needs</h3>
+      <ul>
+        <li>The job title and duties matching one USMCA category (for example Engineer, Computer Systems Analyst, Scientist, Management Consultant, Accountant).</li>
+        <li>Start date, length of the assignment (up to three years), and salary.</li>
+        <li>The degree or license the role requires, which the candidate must hold.</li>
+      </ul>
+      <p>There is no USCIS petition or filing fee for Canadian candidates entering at the border. A Form I-129 petition is optional.</p>
+      <h3>Why post here</h3>
+      <p>Every candidate on the talent list has said which TN category they qualify for and which citizenship they hold, so you are screening people who can start under TN, not people who need a lottery win.</p>
+    </div>
+    <div class="panel">
+      <h2 style="font:800 1.2rem var(--f-display);margin:0 0 12px">Post a TN role</h2>
+      <form id="postForm">
+        <label>Company<input id="pCo" required maxlength="80" autocomplete="organization"></label>
+        <label>Job title<input id="pTitle" required maxlength="120"></label>
+        <div class="row">
+          <label>TN category<select id="pCat" required></select></label>
+          <label>Location<input id="pLoc" required maxlength="80" placeholder="Austin, TX or Remote"></label>
+        </div>
+        <div class="row">
+          <label>Salary<input id="pPay" maxlength="60" placeholder="$110,000 - $140,000 a year"></label>
+          <label>Apply link<input id="pUrl" type="url" required maxlength="300" placeholder="https://"></label>
+        </div>
+        <label>Short description<textarea id="pDesc" rows="3" maxlength="600"></textarea></label>
+        <button class="btn" type="submit">Publish posting</button>
+        <div class="status" id="postStatus" role="status"></div>
+        <p class="note" id="postNote">Postings appear on the job list for everyone who opens this board.</p>
+      </form>
+      <div id="myPosts"></div>
+    </div>
+  </div>
+  <div class="wrap" id="talentAdmin" hidden>
+    <div class="panel" style="margin-bottom:48px">
+      <h2 style="font:800 1.2rem var(--f-display);margin:0 0 4px">Talent list</h2>
+      <p class="note" style="margin:0 0 12px">Visible only to the board owner.</p>
+      <div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Citizenship</th><th>Category</th><th>Degree</th><th>Wants</th><th>Contact</th></tr></thead><tbody id="talentRows"></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section data-page="talent" hidden>
+  <div class="wrap page cols">
+    <div class="prose">
+      <h2>Get matched with employers that hire on TN</h2>
+      <p>Add yourself to the talent list. Employers posting here can contact you about roles that fit your category. Only the board owner can see the list; other candidates and the public cannot.</p>
+      <h3>Before you apply</h3>
+      <ul>
+        <li>You need Canadian or Mexican citizenship. Permanent residence of either country does not qualify.</li>
+        <li>Your degree should match the category. A Computer Systems Analyst usually needs a bachelor's degree, or a post-secondary diploma plus three years of experience.</li>
+        <li>Bring the offer letter, degree, transcripts and proof of citizenship to the border or consulate.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <form id="talentForm">
+        <label>Full name<input id="tName" required maxlength="80" autocomplete="name"></label>
+        <div class="row">
+          <label>Citizenship<select id="tCit" required><option value="">Choose</option><option>Canada</option><option>Mexico</option></select></label>
+          <label>TN category<select id="tCat" required></select></label>
+        </div>
+        <div class="row">
+          <label>Highest degree<input id="tDeg" required maxlength="100" placeholder="B.Eng. Mechanical"></label>
+          <label>Preferred location<input id="tLoc" maxlength="80" placeholder="Seattle, Remote"></label>
+        </div>
+        <label>Target role<input id="tRole" maxlength="100" placeholder="Controls engineer"></label>
+        <label>Email or LinkedIn<input id="tContact" required maxlength="160"></label>
+        <button class="btn" type="submit">Join the list</button>
+        <div class="status" id="talentStatus" role="status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section data-page="about" hidden>
+  <div class="wrap page prose">
+    <h2>TN categories that show up on this board</h2>
+    <p>USMCA Appendix 1603.D.1 lists about 60 professions. These are the ones employers on this board hire for most. A "check" tag on a job means the title does not name the category directly, so the offer letter has to describe duties that match it.</p>
+    <div class="cats" id="catGrid"></div>
+    <h3>What the H-1B filings say about these employers</h3>
+    <p>The figures below come from DOL Labor Condition Application disclosure files and the USCIS Employer Data Hub, as compiled by the open-source H-1B Tech Jobs Tracker (FY2024 through FY2026 Q3, 1.57 million certified cases).</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Role family</th><th class="num">FY2025 LCAs</th><th class="num">Median offered salary</th><th class="num">Entry-level median</th></tr></thead>
+      <tbody>
+        <tr><td>Software Engineer</td><td class="num">156,262</td><td class="num">n/a</td><td class="num">n/a</td></tr>
+        <tr><td>Data Engineer</td><td class="num">12,938</td><td class="num">$128K</td><td class="num">$88K</td></tr>
+        <tr><td>Data Scientist</td><td class="num">12,259</td><td class="num">$144K</td><td class="num">$90K</td></tr>
+        <tr><td>Data Analyst</td><td class="num">8,406</td><td class="num">$106K</td><td class="num">$78K</td></tr>
+        <tr><td>DevOps / SRE / Platform</td><td class="num">6,441</td><td class="num">$125K</td><td class="num">$91K</td></tr>
+        <tr><td>Cybersecurity</td><td class="num">5,221</td><td class="num">$135K</td><td class="num">$90K</td></tr>
+        <tr><td>Cloud Engineer / Architect</td><td class="num">4,668</td><td class="num">$137K</td><td class="num">$91K</td></tr>
+        <tr><td>ML Engineer</td><td class="num">2,446</td><td class="num">$178K</td><td class="num">$132K</td></tr>
+        <tr><td>AI Engineer / Scientist</td><td class="num">1,416</td><td class="num">$134K</td><td class="num">$96K</td></tr>
+      </tbody></table></div>
+    <p>USCIS new-hire denial rates in FY2025 were 0.8% at Walmart, 0.4% at JPMorgan Chase and 0% at Capital One. Ernst &amp; Young filed about 1 in 10 cybersecurity LCAs. Amazon files its analyst work under the title "Business Intelligence Engineer".</p>
+    <p class="note">Job listings were pulled from Indeed and Dice on October 6, 2026. Check each posting with the employer before applying. This board gives general information about TN status, not legal advice.</p>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">TN Ready Jobs. Listings link to the original postings on Indeed and Dice. H-1B statistics: U.S. Department of Labor OFLC disclosure data and USCIS Employer Data Hub.</div></footer>
+
+<script>
+const CATS = {
+  ENG: ["Engineer", "Licensed or degreed engineers: software, electrical, mechanical, process, hardware."],
+  CSA: ["Computer Systems Analyst", "Bachelor's, or post-secondary diploma plus 3 years' experience."],
+  MATH: ["Mathematician / Statistician", "Bachelor's or licenciatura. Common route for data scientists."],
+  SCI: ["Scientist", "Pharmacologist, chemist, biologist and other research scientists."],
+  MC: ["Management Consultant", "Bachelor's, or 5 years' consulting experience."],
+  ACC: ["Accountant", "Bachelor's, or C.P.A., C.A., C.G.A. or C.M.A."]
+};
+const I = "Indeed", D = "Dice";
+// [title, company, location, pay, posted, category, fit (1 strong, 0 check), url, source]
+const SEED = [
+["Software Development Engineer, Amazon Quick","Amazon","Seattle, WA","$143,700 - $194,400 a year","2026-09-30","ENG",0,"https://to.indeed.com/aawqyn66x67g",I],
+["Device Software Engineer, Amazon Leo Government","Amazon","Redmond, WA","$143,700 - $194,400 a year","2026-10-01","ENG",0,"https://to.indeed.com/aaxpxfqflsw6",I],
+["System Development Engineer, Amazon Leo","Amazon","Redmond, WA","$99,100 - $160,000 a year","2026-05-16","ENG",0,"https://to.indeed.com/aabbt6rggbjf",I],
+["Software Development Engineer, Amazon Leo, Early Career - 2026","Amazon","Redmond, WA","$129,000 a year","2026-08-25","ENG",0,"https://to.indeed.com/aalx9vmyzp4v",I],
+["Systems Development Engineer I, Amazon Foundational Security Services","Amazon","Seattle, WA","$99,100 - $160,000 a year","2026-09-18","ENG",0,"https://to.indeed.com/aa4vlmht8zpd",I],
+["Software Development Engineer, Amazon WorkSpaces","Amazon","Seattle, WA","$143,700 - $194,400 a year","2026-07-29","ENG",0,"https://to.indeed.com/aafxbn8w8hjz",I],
+["Software Development Engineer, Amazon Customer Service","Amazon","Seattle, WA","$143,700 - $194,400 a year","2026-08-11","ENG",0,"https://to.indeed.com/aar7zyl764pz",I],
+["Software Development Engineer, Amazon Vulnerability Management Service","Amazon","Seattle, WA","$143,700 - $194,400 a year","2026-09-22","ENG",0,"https://to.indeed.com/aapzh22tlld2",I],
+["Security Engineer II","Microsoft","Redmond, WA","$102,100 - $219,200 a year","2026-09-10","CSA",0,"https://to.indeed.com/aarywcjtkxhg",I],
+["Security Engineer - Red Team","Microsoft","Redmond, WA","$85,400 - $183,700 a year","2026-10-03","CSA",0,"https://to.indeed.com/aavjttxvc4lr",I],
+["Senior Network Security Engineer","Microsoft","Redmond, WA","$119,800 - $261,000 a year","2026-09-24","CSA",0,"https://to.indeed.com/aamvd7d8wt2p",I],
+["Principal Security Engineer","Microsoft","Redmond, WA","$142,800 - $304,200 a year","2026-07-29","CSA",0,"https://to.indeed.com/aanqfrxb2cty",I],
+["Cloud Network Engineer","Microsoft","Redmond, WA","$102,100 - $219,200 a year","2026-09-26","ENG",0,"https://to.indeed.com/aa4cchsrkd7t",I],
+["Senior Security Engineer - Development","Microsoft","Redmond, WA","$119,800 - $261,000 a year","2026-09-24","CSA",0,"https://to.indeed.com/aax8f86k7n6j",I],
+["Fiber Delivery Engineer","Microsoft","Redmond, WA","$102,100 - $219,200 a year","2026-09-30","ENG",1,"https://to.indeed.com/aa76v7tzwdpg",I],
+["Software Engineer, GDC Networking, Google Cloud","Google","Sunnyvale, CA","$147,000 - $210,000 a year","2026-09-14","ENG",0,"https://to.indeed.com/aakxlpr6sr7s",I],
+["Software Test Engineer","Google","Mountain View, CA","$126,000 - $180,000 a year","2026-09-11","CSA",0,"https://to.indeed.com/aa9dxt2yvkj6",I],
+["Software Engineer, Google Health, Nutrition","Google","Mountain View, CA","$147,000 - $210,000 a year","2026-10-05","ENG",0,"https://to.indeed.com/aas8gdvhyb82",I],
+["Software Engineer III, Google Cloud Compute Infrastructure","Google","Sunnyvale, CA","$147,000 - $210,000 a year","2026-09-17","ENG",0,"https://to.indeed.com/aamz8mjcl7qj",I],
+["Senior Software Engineer","Google","Mountain View, CA","$174,000 - $252,000 a year","2026-09-16","ENG",0,"https://to.indeed.com/aa6ptvnc9zk2",I],
+["Software Engineer III, Full Stack","Google","Mountain View, CA","$147,000 - $210,000 a year","2026-09-16","ENG",0,"https://to.indeed.com/aakdrdpcy2vd",I],
+["Software Engineer III, Infrastructure, Google Kubernetes Engine","Google","Sunnyvale, CA","$147,000 - $210,000 a year","2026-09-10","ENG",0,"https://to.indeed.com/aaqvpdzyy7gy",I],
+["Performance & Capacity Engineer - Capacity Planning Optimization","Meta","Menlo Park, CA","$219,000 - $301,000 a year","2026-09-17","ENG",0,"https://to.indeed.com/aazdx7gmg9pr",I],
+["Software Developer, Scaled Ops AI Acceleration Team","Meta","Menlo Park, CA","$171,000 - $240,000 a year","2026-07-24","CSA",0,"https://to.indeed.com/aajvx2ddvncd",I],
+["Cyber Security & Risk Strategy Consultant","Deloitte","Chicago, IL","$82,600 - $162,800 a year","2026-09-15","MC",1,"https://to.indeed.com/aaxf2ppyz6dq",I],
+["Cyber Consultant - Technical Resilience","Deloitte","Chicago, IL","$82,600 - $162,800 a year","2026-09-30","MC",1,"https://to.indeed.com/aarkzwvvwkv4",I],
+["Fleet Management Consultant, Strategy, Growth, and Transformation","Deloitte","Chicago, IL","$86,700 - $170,900 a year","2026-08-28","MC",1,"https://to.indeed.com/aackzvm2f4gh",I],
+["Cyber Security & Risk Strategy Senior Consultant","Deloitte","Chicago, IL","$105,400 - $207,800 a year","2026-09-15","MC",1,"https://to.indeed.com/aavf89vf2jrw",I],
+["Senior Consultant - Deloitte Greenhouse","Deloitte","Chicago, IL","$97,900 - $163,100 a year","2026-09-04","MC",1,"https://to.indeed.com/aak42yds6mrr",I],
+["Cornerstone Technical Consultant","Deloitte","Chicago, IL","$86,700 - $170,900 a year","2026-10-03","MC",1,"https://to.indeed.com/aahqzxfyrnd8",I],
+["Cyber Security & Risk Strategy Manager","Deloitte","Chicago, IL","$134,500 - $265,100 a year","2026-09-15","MC",1,"https://to.indeed.com/aaqx84wj9gv4",I],
+["Software Engineer III","JPMorgan Chase","Jersey City, NJ","$137,750 - $185,000 a year","2026-09-22","ENG",0,"https://to.indeed.com/aajmlmgspydn",I],
+["Software Engineer II - Linux C/C++ systems programming","JPMorgan Chase","Jersey City, NJ","$123,500 - $150,000 a year","2026-09-21","ENG",0,"https://to.indeed.com/aad44hlrfr74",I],
+["Lead Software Engineer - Cloud Platform Engineer/Azure","JPMorgan Chase","Jersey City, NJ","$156,750 - $215,000 a year","2026-09-18","ENG",0,"https://to.indeed.com/aaz8psr6snq8",I],
+["Software Engineer II (Java Full-Stack)","JPMorgan Chase","New York, NY","$123,500 - $150,000 a year","2026-10-02","ENG",0,"https://to.indeed.com/aapc6fvnlndy",I],
+["Software Engineer Associate III - Databricks","JPMorgan Chase","New York, NY","$137,750 - $185,000 a year","2026-09-25","ENG",0,"https://to.indeed.com/aakxphlyshqr",I],
+["Software Engineer III (Full Stack Java)","JPMorgan Chase","New York, NY","$137,750 - $185,000 a year","2026-10-05","ENG",0,"https://to.indeed.com/aaxdvsnrg2n9",I],
+["Manufacturing Systems Software Development Engineer","Intel","Hillsboro, OR","$52,000 - $200,000 a year","2026-09-29","ENG",0,"https://to.indeed.com/aamwfgm7xy6r",I],
+["Intel Mask Operations Module Development Engineer","Intel","Hillsboro, OR","$133,800 - $188,890 a year","2026-09-24","ENG",1,"https://to.indeed.com/aaq8vgrtp78d",I],
+["Yield Development Engineer","Intel","Hillsboro, OR","$115,110 - $219,550 a year","2026-09-30","ENG",1,"https://to.indeed.com/aayzxjmgwzpv",I],
+["Process Integration Development Engineer","Intel","Hillsboro, OR","$115,110 - $162,500 a year","2026-09-29","ENG",1,"https://to.indeed.com/aa88776s9c7t",I],
+["Intel Foundry Process Development Engineer - Lithography","Intel","Hillsboro, OR","$133,800 - $255,200 a year","2026-09-30","ENG",1,"https://to.indeed.com/aa64c8zvz7br",I],
+["EDA Tools Software Engineer","Intel","Hillsboro, OR","$128,880 - $245,160 a year","2026-08-26","ENG",0,"https://to.indeed.com/aak29dk4lts7",I],
+["Principal Data Analyst - Card","Capital One","McLean, VA","","2026-09-18","CSA",0,"https://to.indeed.com/aaxcmjvrzblx",I],
+["Senior Data Analyst - Analytics & Transformation","Capital One","McLean, VA","","2026-08-02","CSA",0,"https://to.indeed.com/aarbr49c2rjb",I],
+["Senior Business Analyst - Insights & Analytics (ERM)","Capital One","McLean, VA","","2026-08-04","MC",0,"https://to.indeed.com/aa922wv6z2h7",I],
+["Senior Business Analyst - Third Party Risk Management","Capital One","McLean, VA","","2026-08-25","MC",0,"https://to.indeed.com/aat7skgg8b7z",I],
+["Mechanical Design Engineer, Tesla Automation","Tesla","Austin, TX","$105,400 - $145,831 a year","2026-06-15","ENG",1,"https://to.indeed.com/aaxwkvlvrh89",I],
+["Datacenter Mechanical Engineer","Tesla","Austin, TX","$122,063 - $158,155 a year","2026-08-20","ENG",1,"https://to.indeed.com/aaxnq6pwz67l",I],
+["Mechanical Design Engineer, Recycling","Tesla","Hutto, TX","$89,438 - $129,682 a year","2026-07-28","ENG",1,"https://to.indeed.com/aafncwvlgldv",I],
+["Manufacturing Controls Engineer, Cyber Cab, Castings","Tesla","Austin, TX","$95,817 - $137,358 a year","2026-08-13","ENG",1,"https://to.indeed.com/aacz7ck2ryvy",I],
+["Mechanical Engineer, Infrastructure Design","Tesla","Austin, TX","$123,997 - $167,749 a year","2026-09-08","ENG",1,"https://to.indeed.com/aal6gnlswgqz",I],
+["Process Engineer","Tesla","Austin, TX","$109,915 - $159,513 a year","2026-08-28","ENG",1,"https://to.indeed.com/aajpq6yffdmh",I],
+["Sr. Facilities Mechanical Engineer","Tesla","Austin, TX","$105,809 - $146,823 a year","2026-07-30","ENG",1,"https://to.indeed.com/aab6vzjv68nb",I],
+["GPU SW Security Engineer","NVIDIA","Santa Clara, CA","$152,000 - $241,500 a year","2026-09-28","ENG",0,"https://to.indeed.com/aaxb9pk2wjzq",I],
+["Staff Security Engineer - PAM and Agentic Identity","NVIDIA","Santa Clara, CA","$168,000 - $270,250 a year","2026-09-10","CSA",0,"https://to.indeed.com/aaphrm7l7h7l",I],
+["Senior Network Security Engineer - DGX Cloud","NVIDIA","Santa Clara, CA","$168,000 - $333,500 a year","2026-07-16","CSA",0,"https://to.indeed.com/aaxpqnv6vfsm",I],
+["Security Research Engineer, AI Safety and Security Engineering","NVIDIA","Santa Clara, CA","$224,000 - $431,250 a year","2026-07-27","ENG",0,"https://to.indeed.com/aaymhvkdfntv",I],
+["Security Engineer, GPU Kernel Driver","NVIDIA","Santa Clara, CA","$152,000 - $287,500 a year","2026-09-29","ENG",0,"https://to.indeed.com/aapmy7cysvsm",I],
+["Senior Platform Security Engineer - Device Trust and Attestation","NVIDIA","Santa Clara, CA","$196,000 - $310,500 a year","2026-09-10","ENG",0,"https://to.indeed.com/aa9rtnxb4ts2",I],
+["Principal, Data Scientist (Pricing)","Walmart","Bentonville, AR","$110,000 - $286,000 a year","2026-08-04","MATH",0,"https://to.indeed.com/aazvz62bvk64",I],
+["Senior, Data Analyst","Walmart","Bentonville, AR","$80,000 - $155,000 a year","2026-09-08","CSA",0,"https://to.indeed.com/aagnrgnqgjz6",I],
+["Staff, Data Scientist (Pricing/Reinforcement Learning)","Walmart","Bentonville, AR","$110,000 - $286,000 a year","2026-08-07","MATH",0,"https://to.indeed.com/aa2b6hmwshvr",I],
+["Hardware Systems Engineer","Apple","Cupertino, CA","$207,673 - $277,600 a year","2026-10-05","ENG",1,"https://to.indeed.com/aa272mjl6mgn",I],
+["Design Verification Engineer","Apple","Cupertino, CA","$150,400 - $225,300 a year","2026-10-05","ENG",1,"https://to.indeed.com/aacngkrpk8xb",I],
+["EMIR/Power Integrity Methodology Engineer","Apple","Cupertino, CA","$150,400 - $277,600 a year","2026-08-27","ENG",1,"https://to.indeed.com/aa9qntd9k86k",I],
+["Module Design Engineer","Apple","Cupertino, CA","$150,400 - $225,300 a year","2026-10-05","ENG",1,"https://to.indeed.com/aav27z66bckn",I],
+["System Product Design Engineer","Apple","Cupertino, CA","$150,400 - $225,300 a year","2026-10-05","ENG",1,"https://to.indeed.com/aa9hntlnvz7y",I],
+["SoC Power Validation Engineer","Apple","Cupertino, CA","$129,300 - $194,700 a year","2026-10-01","ENG",1,"https://to.indeed.com/aasxqpcz8wh4",I],
+["Associate Research Fellow","Pfizer","Cambridge, MA","$162,900 - $271,500 a year","2026-08-08","SCI",1,"https://to.indeed.com/aabzdt77cbcg",I],
+["Clinical Pharmacology Lead (Manager)","Pfizer","Cambridge, MA","$106,000 - $176,600 a year","2026-09-24","SCI",1,"https://to.indeed.com/aash2c4d2zpl",I],
+["Clinical Pharmacology Lead (Associate Director)","Pfizer","Cambridge, MA","$139,100 - $231,900 a year","2026-09-24","SCI",1,"https://to.indeed.com/aaf8dngdtqmj",I],
+["Software Engineering LMTS","Salesforce","San Francisco, CA","$172,500 - $285,800 a year","2026-08-31","ENG",0,"https://to.indeed.com/aalyc24lcchc",I],
+["AI Native - Full Stack Engineer","Salesforce","San Francisco, CA","$197,300 - $344,700 a year","2026-09-14","ENG",0,"https://to.indeed.com/aaqb9sjw2f29",I],
+["Data Engineer, Staff","Qualcomm","San Diego, CA","$133,600 - $200,400 a year","2026-04-09","CSA",0,"https://to.indeed.com/aawh4scbnqlx",I],
+["Data Platform Engineer, Senior Staff","Qualcomm","San Diego, CA","$161,600 - $242,400 a year","2026-03-17","CSA",0,"https://to.indeed.com/aazmyhdzvf7d",I],
+["Staff IT Cloud Engineer","Qualcomm","San Diego, CA","$129,600 - $194,400 a year","2026-05-01","CSA",0,"https://to.indeed.com/aa826d6jwyp8",I],
+["Sr. Engineer, AI Platforms and Solutions","Qualcomm","San Diego, CA","$117,800 - $176,600 a year","2026-09-03","ENG",0,"https://to.indeed.com/aamyltyxt7kt",I],
+["Databricks Lead (Staff IT Engineer)","Qualcomm","San Diego, CA","$119,600 - $179,400 a year","2026-09-15","CSA",0,"https://to.indeed.com/aa8g442rtv4z",I],
+["Senior Software Engineer","Y & L Consulting","San Antonio, TX","$90,000 - $120,000 a year","2026-09-26","CSA",0,"https://www.dice.com/job-detail/e3f5fffe-37db-48bc-8a67-90bd94f1ed8a",D],
+["Software Developer / Software Engineer (Guidewire)","Siritek","Schaumburg, IL","$130,000 - $145,000 a year","2026-09-21","CSA",0,"https://www.dice.com/job-detail/e1e11f3a-d134-426b-ba4e-ab8929393395",D],
+["Software Engineer (Java, Spring Boot)","Siritek","Rolling Meadows, IL","$100,000 - $130,000 a year","2026-09-21","CSA",0,"https://www.dice.com/job-detail/72847f8f-2c1c-4172-8f89-d237dcd94fc2",D],
+["Data Scientist","Medinext Global","Orlando, FL","","2026-09-09","MATH",0,"https://www.dice.com/job-detail/8df03a54-fef4-4dd0-96c9-bbae89eed121",D],
+["Electrical Power Engineer (Data Center)","Asiacom Americas","Sterling, VA","$50,000 - $100,000 a year","2026-10-02","ENG",1,"https://www.dice.com/job-detail/0bc7fc25-ae4a-436f-8177-1e449b34784b",D]
+].map((r, i) => ({ id: "s" + i, title: r[0], co: r[1], loc: r[2], pay: r[3], posted: r[4], cat: r[5], fit: r[6] ? "strong" : "check", url: r[7], src: r[8] }));
+
+const $ = s => document.querySelector(s);
+const el = (tag, props = {}, ...kids) => { const n = Object.assign(document.createElement(tag), props); for (const k of kids) n.append(k); return n; };
+const store = { get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+
+let posted = [];            // employer posts from the shared db
+let saved = new Set(store.get("tn.saved", []));
+const state = { q: "", loc: "", cats: new Set(), fits: new Set(), cos: new Set(), pay: false, saved: false, sort: "date" };
+
+function payNum(p) { const m = (p || "").replace(/,/g, "").match(/\d+(\.\d+)?/g); if (!m) return 0; const v = Math.max(...m.map(Number)); return /hour/.test(p) ? v * 2080 : v; }
+function allJobs() { return [...posted, ...SEED]; }
+function fmtDate(s) { const d = new Date(s + "T12:00:00"); return isNaN(d) ? "" : d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
+
+function checkboxGroup(host, values, set, labelOf) {
+  host.replaceChildren();
+  const counts = {};
+  for (const j of allJobs()) { const v = values(j); counts[v] = (counts[v] || 0) + 1; }
+  Object.keys(counts).sort((a, b) => counts[b] - counts[a]).forEach(v => {
+    const cb = el("input", { type: "checkbox", checked: set.has(v) });
+    cb.addEventListener("change", () => { cb.checked ? set.add(v) : set.delete(v); render(); });
+    host.append(el("label", {}, cb, el("span", { textContent: labelOf(v) }), el("span", { className: "n", textContent: counts[v] })));
+  });
+}
+function buildFilters() {
+  checkboxGroup($("#fCat"), j => j.cat, state.cats, v => CATS[v][0]);
+  checkboxGroup($("#fFit"), j => j.fit, state.fits, v => v === "strong" ? "Title names the category" : "Check offer wording");
+  checkboxGroup($("#fCo"), j => j.co, state.cos, v => v);
+}
+
+function render() {
+  const q = state.q.toLowerCase(), loc = state.loc.toLowerCase();
+  let jobs = allJobs().filter(j =>
+    (!q || (j.title + " " + j.co + " " + (j.desc || "")).toLowerCase().includes(q)) &&
+    (!loc || j.loc.toLowerCase().includes(loc)) &&
+    (!state.cats.size || state.cats.has(j.cat)) &&
+    (!state.fits.size || state.fits.has(j.fit)) &&
+    (!state.cos.size || state.cos.has(j.co)) &&
+    (!state.pay || j.pay) && (!state.saved || saved.has(j.id)));
+  const by = { date: (a, b) => b.posted.localeCompare(a.posted), pay: (a, b) => payNum(b.pay) - payNum(a.pay), co: (a, b) => a.co.localeCompare(b.co) }[state.sort];
+  jobs.sort(by);
+  $("#count").textContent = jobs.length + (jobs.length === 1 ? " job" : " jobs");
+  const list = $("#list"); list.replaceChildren();
+  if (!jobs.length) { list.append(el("div", { className: "empty", textContent: "No jobs match these filters. Clear a filter or try a broader keyword." })); return; }
+  for (const j of jobs) {
+    const save = el("button", { className: "save", type: "button", textContent: saved.has(j.id) ? "Saved" : "Save" });
+    save.setAttribute("aria-pressed", saved.has(j.id));
+    save.addEventListener("click", () => { saved.has(j.id) ? saved.delete(j.id) : saved.add(j.id); store.set("tn.saved", [...saved]); render(); });
+    const stamp = el("span", { className: "stamp" + (j.fit === "check" ? " check" : ""), textContent: "TN · " + CATS[j.cat][0], title: j.fit === "check" ? "The title does not name this category. The offer letter must describe matching duties." : "The title names this TN category." });
+    const foot = el("div", { className: "foot" },
+      el("span", { className: "pill", textContent: j.src === "Employer" ? "Posted on TN Ready Jobs" : (j.src === "Dice" ? "Open to sponsorship (employer flag)" : "Files H-1B LCAs") }),
+      el("span", { textContent: "Posted " + fmtDate(j.posted) }),
+      el("span", { textContent: "via " + j.src }));
+    list.append(el("article", { className: "job" },
+      el("h2", {}, el("a", { href: j.url, target: "_blank", rel: "noopener", textContent: j.title })),
+      el("div", {}, el("span", { className: "co", textContent: j.co }), el("span", { className: "where", textContent: " · " + j.loc })),
+      el("div", { className: "pay", textContent: j.pay || "Salary not listed" }),
+      ...(j.desc ? [el("p", { style: "grid-column:1/-1;margin:4px 0 0;color:var(--muted)", textContent: j.desc })] : []),
+      el("div", { className: "side" }, stamp, save),
+      foot));
+  }
+}
+
+// tabs
+const tabs = [...document.querySelectorAll("nav.tabs button")];
+function show(name) {
+  tabs.forEach(b => b.setAttribute("aria-selected", b.dataset.tab === name));
+  document.querySelectorAll("[data-page]").forEach(s => s.hidden = s.dataset.page !== name);
+  store.set("tn.tab", name);
+}
+tabs.forEach(b => b.addEventListener("click", () => { show(b.dataset.tab); window.scrollTo(0, 0); }));
+const hashTab = location.hash.slice(1);
+show(["jobs", "employers", "talent", "about"].includes(hashTab) ? hashTab : store.get("tn.tab", "jobs"));
+
+// search + filters
+$("#searchForm").addEventListener("submit", e => { e.preventDefault(); state.q = $("#q").value.trim(); state.loc = $("#loc").value.trim(); render(); });
+$("#q").addEventListener("input", () => { state.q = $("#q").value.trim(); render(); });
+$("#loc").addEventListener("input", () => { state.loc = $("#loc").value.trim(); render(); });
+$("#fPay").addEventListener("change", e => { state.pay = e.target.checked; render(); });
+$("#fSaved").addEventListener("change", e => { state.saved = e.target.checked; render(); });
+$("#sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
+
+for (const sel of ["#pCat", "#tCat"]) {
+  $(sel).append(el("option", { value: "", textContent: "Choose" }));
+  for (const [k, [name]] of Object.entries(CATS)) $(sel).append(el("option", { value: k, textContent: name }));
+}
+$("#catGrid").append(...Object.values(CATS).map(([n, d]) => el("div", { className: "cat" }, el("b", { textContent: n }), el("span", { textContent: d }))));
+
+buildFilters(); render();
+
+// shared data: employer posts and talent list
+function disableForm(form, statusEl, msg) {
+  form.querySelectorAll("input,select,textarea,button").forEach(n => n.disabled = true);
+  statusEl.className = "status"; statusEl.textContent = msg;
+}
+const offline = "Posting is turned off in this copy of the board. Open the hosted board on claude.ai while signed in to post.";
+const offlineTalent = "Joining the list is turned off in this copy of the board. Open the hosted board on claude.ai while signed in to join.";
+
+(async () => {
+  const [db, user] = await Promise.all([window.claude?.use?.("db") ?? null, window.claude?.use?.("user") ?? null]);
+  const uid = user ? await user.id() : null;
+  if (!db || !uid) {
+    disableForm($("#postForm"), $("#postStatus"), offline);
+    disableForm($("#talentForm"), $("#talentStatus"), offlineTalent);
+    return;
+  }
+  // live employer postings: posts/<employerId> holds {roles: [...]}
+  let myRoles = [];
+  db.collection("posts").onSnapshot(snap => {
+    posted = []; myRoles = [];
+    for (const d of snap.docs) {
+      const roles = (d.data()?.roles || []);
+      roles.forEach((r, i) => posted.push({ id: "p" + d.id + i, title: String(r.title || ""), co: String(r.co || ""), loc: String(r.loc || ""), pay: String(r.pay || ""), posted: String(r.posted || ""), cat: CATS[r.cat] ? r.cat : "ENG", fit: "strong", url: /^https:\/\//.test(r.url) ? r.url : "#", src: "Employer", desc: String(r.desc || "") }));
+      if (d.id === uid) myRoles = roles.slice();
+    }
+    buildFilters(); render(); renderMine();
+  }, () => {});
+
+  function renderMine() {
+    const host = $("#myPosts"); host.replaceChildren();
+    if (!myRoles.length) return;
+    host.append(el("h3", { style: "font:700 1rem var(--f-display);margin:20px 0 8px", textContent: "Your postings" }));
+    myRoles.forEach((r, i) => {
+      const del = el("button", { className: "btn ghost", type: "button", textContent: "Remove" });
+      del.addEventListener("click", async () => { const next = myRoles.filter((_, k) => k !== i); try { await db.doc("posts/" + uid).set({ roles: next }); } catch { $("#postStatus").className = "status err"; $("#postStatus").textContent = "Could not remove that posting. Try again."; } });
+      host.append(el("div", { style: "display:flex;justify-content:space-between;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)" }, el("span", { textContent: r.title + " · " + r.loc }), del));
+    });
+  }
+
+  $("#postForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const s = $("#postStatus");
+    const role = { co: $("#pCo").value.trim(), title: $("#pTitle").value.trim(), cat: $("#pCat").value, loc: $("#pLoc").value.trim(), pay: $("#pPay").value.trim(), url: $("#pUrl").value.trim(), desc: $("#pDesc").value.trim(), posted: new Date().toISOString().slice(0, 10) };
+    if (!/^https:\/\//.test(role.url)) { s.className = "status err"; s.textContent = "The apply link must start with https://"; return; }
+    if (myRoles.length >= 25) { s.className = "status err"; s.textContent = "You can have 25 postings at a time. Remove one first."; return; }
+    try {
+      await db.doc("posts/" + uid).set({ roles: [...myRoles, role] });
+      s.className = "status ok"; s.textContent = "Published. Your role is now on the job list.";
+      $("#postForm").reset();
+    } catch (err) {
+      s.className = "status err";
+      s.textContent = err?.code === "invalid_argument" ? "Your access level cannot post here. Ask the board owner for Contributor access." : "Could not publish. Check your connection and try again.";
+    }
+  });
+
+  // talent list: talent/<uid>, readable only by the board owner
+  const mine = await db.doc("talent/" + uid).get().catch(() => null);
+  if (mine?.exists) {
+    const t = mine.data();
+    $("#tName").value = t.name || ""; $("#tCit").value = t.cit || ""; $("#tCat").value = t.cat || ""; $("#tDeg").value = t.deg || ""; $("#tLoc").value = t.loc || ""; $("#tRole").value = t.role || ""; $("#tContact").value = t.contact || "";
+    $("#talentStatus").textContent = "You are on the list. Submit again to update your details.";
+  }
+  $("#talentForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const s = $("#talentStatus");
+    const t = { name: $("#tName").value.trim(), cit: $("#tCit").value, cat: $("#tCat").value, deg: $("#tDeg").value.trim(), loc: $("#tLoc").value.trim(), role: $("#tRole").value.trim(), contact: $("#tContact").value.trim(), updated: new Date().toISOString() };
+    try { await db.doc("talent/" + uid).set(t); s.className = "status ok"; s.textContent = "You are on the talent list."; }
+    catch (err) { s.className = "status err"; s.textContent = err?.code === "invalid_argument" ? "Your access level cannot join the list. Ask the board owner for Contributor access." : "Could not save. Check your connection and try again."; }
+  });
+
+  if (user.isOwner()) {
+    $("#talentAdmin").hidden = false;
+    db.collection("talent").onSnapshot(snap => {
+      const rows = $("#talentRows"); rows.replaceChildren();
+      if (snap.empty) { rows.append(el("tr", {}, el("td", { colSpan: 6, className: "note", textContent: "No one has joined yet. Share the board link with candidates and they appear here." }))); return; }
+      for (const d of snap.docs) { const t = d.data(); rows.append(el("tr", {}, ...[t.name, t.cit, CATS[t.cat]?.[0] || "", t.deg, [t.role, t.loc].filter(Boolean).join(", "), t.contact].map(v => el("td", { textContent: String(v || "") })))); }
+    }, () => {});
+  }
+})();
+</script>
