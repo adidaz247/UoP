@@ -190,6 +190,33 @@
     height: 6px;
     cursor: pointer;
   }
+  .req-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-top: 6px;
+    font-size: 0.74rem;
+    color: var(--muted);
+  }
+  .req-row input[type="range"] {
+    flex: 1;
+    min-width: 90px;
+    max-width: 160px;
+    accent-color: var(--orange);
+    height: 6px;
+    cursor: pointer;
+  }
+  .req-row input[type="range"]:disabled { opacity: 0.4; cursor: not-allowed; }
+  .req-row input[type="number"] {
+    width: 48px;
+    background: #22262f;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 2px 6px;
+    font-size: 0.74rem;
+  }
   .platform-choice {
     display: flex;
     gap: 14px;
@@ -260,7 +287,7 @@
   <div id="phases"></div>
 
   <button class="reset-btn" id="resetBtn">Reset all progress</button>
-  <div class="footer-note">Tap the checkbox to mark a course done. Drag the slider on any in-progress course to log where you're at. Unchecking a done course brings back the progress it had before, not 100%. Everything saves automatically and persists between visits.</div>
+  <div class="footer-note">Tap the checkbox to mark a course done. Drag the slider on any in-progress course to log where you're at. On Study.com courses, enter the total number of requirements and drag the slider to how many you've finished. Unchecking a done course brings back the progress it had before, not 100%. Everything saves automatically and persists between visits.</div>
 </div>
 
 <script>
@@ -279,20 +306,20 @@ const COURSES = [
   // Sophia - next steps
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Statistics", code:"MATH 1280", meta:"Month 1 · $79", done:true, cost:79, alt:"Study.com: Statistics 101 (Principles of Statistics)"},
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Ethics (Values GE)", code:"Gen Ed", meta:"Month 1 · incl. · ACE transcript: Pass, issued 28 Sept 2026", done:true, cost:0, alt:"Study.com: Philosophy 103 (Ethics – Theory & Practice)"},
-  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Psychology (Social Sci GE)", code:"Gen Ed", meta:"Month 2 · $79 · active on Sophia", done:false, cost:79, alt:"Study.com: Psychology 101 (Intro to Psychology)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Introduction to Psychology (Social Sci GE)", code:"Gen Ed", meta:"Month 2 · $79 · completed", done:true, cost:79, alt:"Study.com: Psychology 101 (Intro to Psychology)"},
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Environmental Science (Nat Sci GE)", code:"Gen Ed", meta:"Month 2 · incl. · ACE transcript: Pass, issued 2 Oct 2026", done:true, cost:0, alt:"Study.com: Environmental Science 101 (Environment and Humanity)"},
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Art History I (Humanities GE 2)", code:"Gen Ed", meta:"Month 3 · $79 · ACE transcript: Pass, issued 4 Oct 2026", done:true, cost:79, alt:"Study.com: Art 103 (History of Western Art I)"},
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Communications and Networking", code:"CS 2204", meta:"Month 3 · incl. · done via Study.com, ACE transcript: Pass, issued 28 Sept 2026", done:true, cost:0, alt:"Study.com: CS 108 (Introduction to Networking)"},
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Web Programming 1", code:"CS 2205", meta:"Month 4 · $79", done:true, cost:79, alt:"Study.com: CS 104 (Intro to Web Development)"},
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Calculus I", code:"MATH 1211", meta:"Month 4 · incl. · via Study.com (Math 104)", done:true, cost:0, alt:"Study.com: Math 104 (Calculus)"},
-  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Civilization Studies GE (Approaches to Studying Religions)", code:"Gen Ed", meta:"Month 5 · $79 · swapped from Art History II (that's Humanities, not Civilization Studies)", done:false, cost:79, alt:"Study.com: History 101 (Western Civilization I)", startProgress:82},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Civilization Studies GE (Approaches to Studying Religions)", code:"Gen Ed", meta:"Month 5 · $79 · swapped from Art History II (that's Humanities, not Civilization Studies)", done:true, cost:79, alt:"Study.com: History 101 (Western Civilization I)"},
 
   // Study.com
-  {phase:"Study.com — After Sophia", platform:"study", title:"Discrete Mathematics", code:"MATH 1302", meta:"Month 6 · $235", done:false, cost:235},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Discrete Mathematics", code:"MATH 1302", meta:"Month 6 · $235 · Study.com Math 108", done:false, cost:235, reqSeed:{total:12, done:5}},
   {phase:"Study.com — After Sophia", platform:"study", title:"Digital Electronics & Computer Architecture", code:"CS 1105", meta:"Month 6 · incl.", done:false, cost:0},
   {phase:"Study.com — After Sophia", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Month 6 · incl. · target: all 5 Study.com courses in 1 month", done:false, cost:0},
   {phase:"Study.com — After Sophia", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Month 6 · incl.", done:false, cost:0},
-  {phase:"Study.com — After Sophia", platform:"study", title:"Operating Systems 1", code:"CS 2301", meta:"Month 6 · incl. · target: all 5 Study.com courses in 1 month", done:false, cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Operating Systems 1", code:"CS 2301", meta:"Month 6 · incl. · Study.com CS 105 · target: all 5 Study.com courses in 1 month", done:false, cost:0, reqSeed:{total:10, done:0}},
 
   // Extra ACE-recommended credit, completed but not yet slotted into the 36-course plan
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals · could help close the 4-course/120-credit gap — confirm mapping with advisor", done:true, cost:0},
@@ -318,10 +345,16 @@ const STORAGE_KEY = "uopeople-checklist-state-v1";
 const PROGRESS_KEY = "uopeople-checklist-progress-v1";
 const PREV_PROGRESS_KEY = "uopeople-checklist-prevprogress-v1";
 const PLATFORM_KEY = "uopeople-checklist-platformchoice-v1";
+const REQ_KEY = "uopeople-checklist-requirements-v1";
+const SEED_KEY = "uopeople-checklist-seedversion-v1";
+// Bump this whenever courses are marked done in the COURSES list above.
+// On the next visit, anything marked done here gets checked once (you can still uncheck it afterward).
+const SEED_VERSION = "2026-10-11";
 let state = {};          // { "phase|title": true/false }
 let progress = {};       // { "phase|title": 0-100 }
 let prevProgress = {};   // { "phase|title": 0-100 } — progress to restore if a done course gets unchecked
 let platformChoice = {}; // { "phase|title": "sophia" | "study" } — which platform you're actually working the course on
+let reqs = {};           // { "phase|title": {total, done, prevDone} } — Study.com style "X of N requirements" tracking
 
 function keyFor(item) { return item.phase + "|" + item.title; }
 
@@ -335,6 +368,17 @@ function computeInitialProgress() {
   const p = {};
   COURSES.forEach(c => { if (c.startProgress) p[keyFor(c)] = c.startProgress; });
   return p;
+}
+
+function computeInitialReqs() {
+  const r = {};
+  COURSES.forEach(c => { if (c.reqSeed) r[keyFor(c)] = { total: c.reqSeed.total, done: c.reqSeed.done }; });
+  return r;
+}
+
+// Study.com courses count requirements. Dual-platform courses switch to this mode when "Working on Study.com" is checked.
+function usesReqs(item) {
+  return item.platform === "study" || platformChoice[keyFor(item)] === "study";
 }
 
 async function loadState() {
@@ -371,6 +415,29 @@ async function loadState() {
     platformChoice = raw ? JSON.parse(raw) : {};
   } catch (e) {
     platformChoice = {};
+  }
+  try {
+    const raw = localStorage.getItem(REQ_KEY);
+    reqs = Object.assign(computeInitialReqs(), raw ? JSON.parse(raw) : {});
+  } catch (e) {
+    reqs = computeInitialReqs();
+  }
+  try {
+    if (localStorage.getItem(SEED_KEY) !== SEED_VERSION) {
+      COURSES.forEach(c => { if (c.done) state[keyFor(c)] = true; });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(SEED_KEY, SEED_VERSION);
+    }
+  } catch (e) {
+    console.error("Seed sync failed", e);
+  }
+}
+
+async function saveReqs() {
+  try {
+    localStorage.setItem(REQ_KEY, JSON.stringify(reqs));
+  } catch (e) {
+    console.error("Save failed", e);
   }
 }
 
@@ -435,6 +502,8 @@ function render() {
       const isDone = !!state[keyFor(item)];
       const pct = progress[keyFor(item)] || 0;
       const chosenPlatform = platformChoice[keyFor(item)] || null;
+      const reqMode = usesReqs(item);
+      const rq = reqs[keyFor(item)] || { total: 0, done: 0 };
       const row = document.createElement("div");
       row.className = "item" + (isDone ? " done" : "");
       row.innerHTML = `
@@ -456,10 +525,17 @@ function render() {
               <label><input type="checkbox" data-role="plat-study" ${chosenPlatform === "study" ? "checked" : ""}> Working on Study.com</label>
             </div>
           ` : ""}
-          ${!isDone ? `
+          ${(!isDone && !reqMode) ? `
             <div class="progress-row">
               <input type="range" min="0" max="100" step="1" value="${pct}" data-role="slider">
               <span class="mini-pct" data-role="pct-label">${pct}%</span>
+            </div>
+          ` : ""}
+          ${(!isDone && reqMode) ? `
+            <div class="req-row">
+              <label>Total <input type="number" min="1" max="99" step="1" value="${rq.total || ""}" placeholder="?" data-role="req-total"></label>
+              <input type="range" min="0" max="${rq.total || 0}" step="1" value="${rq.done || 0}" ${rq.total ? "" : "disabled"} data-role="req-slider">
+              <span class="mini-pct" data-role="req-label">${rq.total ? (rq.done || 0) + " / " + rq.total : "set total"}</span>
             </div>
           ` : ""}
         </div>
@@ -470,6 +546,20 @@ function render() {
       });
       if (isDone) {
         row.addEventListener("click", () => toggleItem(item));
+      } else if (reqMode) {
+        const totalInput = row.querySelector('[data-role="req-total"]');
+        const reqSlider = row.querySelector('[data-role="req-slider"]');
+        const reqLabel = row.querySelector('[data-role="req-label"]');
+        [totalInput, reqSlider].forEach(el => el.addEventListener("click", (e) => e.stopPropagation()));
+        reqSlider.addEventListener("input", (e) => {
+          reqLabel.textContent = e.target.value + " / " + rq.total;
+        });
+        reqSlider.addEventListener("change", (e) => {
+          setReqDone(item, parseInt(e.target.value, 10));
+        });
+        totalInput.addEventListener("change", (e) => {
+          setReqTotal(item, parseInt(e.target.value, 10));
+        });
       } else {
         const slider = row.querySelector('[data-role="slider"]');
         const label = row.querySelector('[data-role="pct-label"]');
@@ -488,10 +578,12 @@ function render() {
         sophiaCb.addEventListener("change", () => {
           if (sophiaCb.checked) { studyCb.checked = false; setPlatformChoice(item, "sophia"); }
           else { setPlatformChoice(item, null); }
+          render();
         });
         studyCb.addEventListener("change", () => {
           if (studyCb.checked) { sophiaCb.checked = false; setPlatformChoice(item, "study"); }
           else { setPlatformChoice(item, null); }
+          render();
         });
       }
       phaseDiv.appendChild(row);
@@ -506,6 +598,21 @@ function render() {
 function toggleItem(item) {
   const k = keyFor(item);
   const wasDone = !!state[k];
+  if (usesReqs(item)) {
+    const r = reqs[k] || (reqs[k] = { total: 0, done: 0 });
+    if (!wasDone) {
+      r.prevDone = r.done || 0;
+      if (r.total) { r.done = r.total; }
+      state[k] = true;
+    } else {
+      state[k] = false;
+      r.done = Math.min(r.prevDone || 0, r.total || 0);
+    }
+    saveReqs();
+    saveState();
+    render();
+    return;
+  }
   if (!wasDone) {
     // Marking done: remember whatever progress it had so unchecking can restore it.
     prevProgress[k] = progress[k] || 0;
@@ -519,6 +626,28 @@ function toggleItem(item) {
   saveState();
   saveProgress();
   savePrevProgress();
+  render();
+}
+
+function setReqTotal(item, val) {
+  const k = keyFor(item);
+  const r = reqs[k] || (reqs[k] = { total: 0, done: 0 });
+  r.total = (val > 0) ? Math.min(val, 99) : 0;
+  r.done = Math.min(r.done || 0, r.total);
+  saveReqs();
+  render();
+}
+
+function setReqDone(item, val) {
+  const k = keyFor(item);
+  const r = reqs[k] || (reqs[k] = { total: 0, done: 0 });
+  r.done = Math.max(0, Math.min(r.total, val));
+  if (r.total && r.done >= r.total) {
+    state[k] = true;
+    r.prevDone = 0;
+  }
+  saveReqs();
+  saveState();
   render();
 }
 
@@ -561,6 +690,8 @@ document.getElementById("resetBtn").addEventListener("click", async () => {
     progress = computeInitialProgress();
     prevProgress = {};
     platformChoice = {};
+    reqs = computeInitialReqs();
+    await saveReqs();
     await saveState();
     await saveProgress();
     await savePrevProgress();
