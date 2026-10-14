@@ -258,7 +258,7 @@
   <div class="stat-row">
     <div class="stat-tile">
       <div class="stat-num mono" id="doneCount">—</div>
-      <div class="stat-label">of 36 courses done</div>
+      <div class="stat-label">of 40 courses done</div>
     </div>
     <div class="stat-tile">
       <div class="stat-num mono" id="pctVal">—</div>
@@ -275,9 +275,9 @@
   <div class="flag-card">
     <div class="flag-title">Confirm with UoPeople advisor before finishing the plan</div>
     <ul>
-      <li><b>Transfer cap:</b> default is 50% of the degree (60 credits / 20 courses). The 75% ceiling (90 credits / 30 courses) needs special approval, not automatic. This plan transfers 23 courses (69 credits), above the default.</li>
-      <li><b>Course count gap:</b> the current catalog requires 40 courses (120 credits) for the CS B.S. This plan totals 36 courses (108 credits), a 4-course shortfall to sort out with your advisor.</li>
-      <li><b>Fees:</b> UoPeople assessment fee is $180 per course per the current catalog.</li>
+      <li><b>Transfer cap:</b> default is 50% of the degree (60 credits / 20 courses). The 75% ceiling (90 credits / 30 courses) needs special approval. This plan transfers 30 courses (90 credits), exactly at the ceiling. UoPeople's own Study.com pathway guide lists 81 transfer credits, so cite it in the request.</li>
+      <li><b>Moved to Study.com:</b> CS 2401, CS 3340 and CS 4408 now run on Study.com. CS 1102 (CS 115) and COM 2001 (Business 113) fill two required courses the audit showed uncovered.</li>
+      <li><b>Fees:</b> UoPeople assessment fee is $180 per course per the current catalog. Study.com is $235 per month.</li>
     </ul>
   </div>
 
@@ -307,27 +307,32 @@ const CATALOG = [
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Communications and Networking", code:"CS 2204", meta:"Month 3 · incl.", cost:0, alt:"Study.com: CS 108 (Introduction to Networking)"},
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Web Programming 1", code:"CS 2205", meta:"Month 4 · $79", cost:79, alt:"Study.com: CS 104 (Intro to Web Development)"},
   {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Calculus I", code:"MATH 1211", meta:"Month 4 · incl.", cost:0, alt:"Study.com: Math 104 (Calculus)"},
-  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Civilization Studies GE (Art History II)", code:"Gen Ed", meta:"Month 5 · $79", cost:79, alt:"Study.com: Art 104 (History of Western Art II)"},
+  {phase:"Sophia.com OR Study.com — Next Steps", platform:"sophia", title:"Civilization Studies GE (Approaches to Studying Religions)", code:"Gen Ed", meta:"Month 5 · $79", cost:79, alt:"Study.com: History 101 (Western Civilization I)"},
 
-  {phase:"Study.com — After Sophia", platform:"study", title:"Discrete Mathematics", code:"MATH 1302", meta:"Month 6 · $95", cost:95},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Discrete Mathematics", code:"MATH 1302", meta:"Month 6 · $235", cost:235},
   {phase:"Study.com — After Sophia", platform:"study", title:"Digital Electronics & Computer Architecture", code:"CS 1105", meta:"Month 6 · incl.", cost:0},
-  {phase:"Study.com — After Sophia", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Month 7 · $95", cost:95},
-  {phase:"Study.com — After Sophia", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Month 7 · incl.", cost:0},
-  {phase:"Study.com — After Sophia", platform:"study", title:"Operating Systems 1", code:"CS 2301", meta:"Month 8 · $95", cost:95},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Month 6 · incl.", cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Month 6 · incl.", cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Operating Systems 1", code:"CS 2301", meta:"Month 6 · incl.", cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Programming 1", code:"CS 1102", meta:"Month 7 · $235 (2nd Study.com month)", cost:235},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Professional Communication", code:"COM 2001", meta:"Month 7 · incl.", cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Month 7 · incl.", cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Month 7 · incl.", cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Month 7 · incl.", cost:0},
+
+  {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals", cost:0},
+  {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Introduction to Nutrition (Sophia)", code:"ACE SOPH-0063", meta:"3 ACE credits", cost:0},
 
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Online Education Strategies", code:"UNIV 1001", meta:"Term 1 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Software Engineering 1", code:"CS 2401", meta:"Term 1 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Web Programming 2", code:"CS 3305", meta:"Term 2 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Web Programming 2", code:"CS 3305", meta:"Term 1 · $180", cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Operating Systems 2", code:"CS 3307", meta:"Term 2 · $180", cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Comparative Programming Languages", code:"CS 4402", meta:"Term 3 · $180", cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Data Mining and Machine Learning", code:"CS 4407", meta:"Term 3 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Term 4 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Analysis of Algorithms", code:"CS 3304", meta:"Term 4 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Advanced Networking & Security", code:"CS 4404", meta:"Term 5 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Big Data", code:"CS 3440", meta:"Term 5 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Term 6 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Software Engineering 2", code:"CS 4403", meta:"Term 6 · $180", cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Mobile Applications", code:"CS 4405", meta:"Term 7 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Analysis of Algorithms", code:"CS 3304", meta:"Term 2 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Advanced Networking & Security", code:"CS 4404", meta:"Term 4 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Big Data", code:"CS 3440", meta:"Term 4 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Software Engineering 2", code:"CS 4403", meta:"Term 5 · $180", cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Mobile Applications", code:"CS 4405", meta:"Term 5 · $180", cost:180},
 ];
 
 function slugify(title) {
