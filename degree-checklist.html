@@ -279,7 +279,7 @@
     <div class="flag-title">⚠️ Confirm with UoPeople advisor before finishing the plan</div>
     <ul>
       <li><b>Transfer cap:</b> default is 50% of the degree (60 credits / 20 courses). The 75% ceiling (90 credits / 30 courses) needs special approval — not automatic. This plan transfers 23 courses (69 credits), above the default.</li>
-      <li><b>Course count gap:</b> current catalog requires 40 courses (120 credits) for the CS B.S. This plan totals 36 courses (108 credits) — a 4-course shortfall. The Google IT Support Certificate (12 ACE credits) and Introduction to Nutrition (3 ACE credits) are completed but not yet slotted in — ask your advisor if either can count toward the gap.</li>
+      <li><b>Two required courses are uncovered:</b> CS 1102 Programming 1 (Sophia Python maps to CS 1101 only) and COM 2001 Professional Communication. Both are on the UoPeople/Study.com pathway guide (CS 115, and Business 113 / Business 313 / Communications 102), so they are added below. UoPeople's own Study.com pathway lists 81 transfer credits and 39 UoPeople credits, which is above the 60-credit default cap. Cite it in the cap exception request. The Google IT Certificate (12 ACE credits) and Nutrition (3) are spare credits for elective slots.</li>
       <li><b>Fees updated:</b> UoPeople assessment fee is $180/course per the current catalog (this checklist reflects that; it was originally budgeted at $160).</li>
     </ul>
   </div>
@@ -316,10 +316,12 @@ const COURSES = [
 
   // Study.com
   {phase:"Study.com — After Sophia", platform:"study", title:"Discrete Mathematics", code:"MATH 1302", meta:"Month 6 · $235 · Study.com Math 108", done:false, cost:235, reqSeed:{total:12, done:5}},
-  {phase:"Study.com — After Sophia", platform:"study", title:"Digital Electronics & Computer Architecture", code:"CS 1105", meta:"Month 6 · incl.", done:false, cost:0},
-  {phase:"Study.com — After Sophia", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Month 6 · incl. · target: all 5 Study.com courses in 1 month", done:false, cost:0},
-  {phase:"Study.com — After Sophia", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Month 6 · incl.", done:false, cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Digital Electronics & Computer Architecture", code:"CS 1105", meta:"Month 6 · incl. · Study.com CS 306 (Computer Architecture)", done:false, cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Month 6 · incl. · Study.com CS 201 (Data Structures & Algorithms) · target: all 5 Study.com courses in 1 month", done:false, cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Month 6 · incl. · Study.com CS 303 (Database Management)", done:false, cost:0},
   {phase:"Study.com — After Sophia", platform:"study", title:"Operating Systems 1", code:"CS 2301", meta:"Month 6 · incl. · Study.com CS 105 · target: all 5 Study.com courses in 1 month", done:false, cost:0, reqSeed:{total:10, done:0}},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Programming 1", code:"CS 1102", meta:"Month 6 · incl. · Study.com CS 115 · fills the CS 1102 gap (Sophia Python covers only CS 1101)", done:false, cost:0},
+  {phase:"Study.com — After Sophia", platform:"study", title:"Professional Communication", code:"COM 2001", meta:"Month 6 · incl. · Study.com Business 113, Business 313 or Communications 102 · fills the COM 2001 gap", done:false, cost:0},
 
   // Extra ACE-recommended credit, completed but not yet slotted into the 36-course plan
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals · could help close the 4-course/120-credit gap — confirm mapping with advisor", done:true, cost:0},
