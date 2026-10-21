@@ -282,7 +282,8 @@
       <li><b>Transfer cap:</b> default is 50% of the degree (60 credits / 20 courses). The 75% ceiling (90 credits / 30 courses) needs special approval — not automatic. This plan transfers 23 courses (69 credits), above the default.</li>
       <li><b>Audit of 20 Oct 2026: 57 of 120 credits posted</b> (Major 27/60, General Education 21/30, Electives 9/30). Still not posted: Java (CS 1103, should map, ask the transfer office) and Public Speaking (Social Science). Critical Thinking and Project Management are not needed. Remaining: 21 courses, 11 expected by transfer (90 transfer credits total, exactly the ceiling) and 10 direct at UoPeople.</li>
       <li><b>Study.com status:</b> Calculus posted as MATH 1211 and Networking posted as Major Elective 2 (EXT-MAJ 1002), so CS 3308 is no longer needed. Discrete Mathematics and Operating Systems 1 are passed and go in the next request. College Saver Pro allows 3 courses at a time.</li>
-      <li><b>Required courses still uncovered:</b> CS 1102 is now posted (Python counted twice). COM 2001 Professional Communication remains, and Study.com Business 113, Business 313 or Communications 102 fills it. UoPeople's own Study.com pathway lists 81 transfer credits, above the 60-credit default cap, so cite it in the exception request. CS 2401, CS 3340 and CS 4408 run on Study.com to use the 90-credit ceiling.</li>
+      <li><b>Required courses still uncovered:</b> CS 1102 is now posted (Python counted twice). COM 2001 Professional Communication remains, and Study.com Business 113, Business 313 or Communications 102 fills it. UoPeople's own Study.com pathway lists 81 transfer credits, above the 60-credit default cap, so cite it in the exception request. CS 2401, CS 3340 and CS 3307 run on Study.com to use the 90-credit ceiling. CS 3307 is there because it is proctored, and CS 4408 moved back to UoPeople to make room.</li>
+      <li><b>Proctored courses (8 required):</b> 3 are posted (CS 2205, MATH 1201, MATH 1280). Study.com covers 4 more (CS 2301, 3303, 3306, 3307). CS 3305, 4402 and 4407 are required, proctored, and have no Study.com equivalent, so you take those 3 at UoPeople. That gives 10 total, or 6 if Study.com credit does not count toward the counter.</li>
       <li><b>Fees updated:</b> UoPeople assessment fee is $180/course per the current catalog (this checklist reflects that; it was originally budgeted at $160).</li>
     </ul>
   </div>
@@ -328,7 +329,7 @@ const COURSES = [
   {phase:"Study.com", platform:"study", title:"Professional Communication", code:"COM 2001", meta:"Month 7 · $235 (2nd Study.com month) · Study.com Business 113, Business 313 or Communications 102 · fills the COM 2001 gap", done:false, cost:235},
   {phase:"Study.com", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Month 7 · incl. · Study.com CS 307 · moved from UoPeople, needs the 75% cap exception", done:false, cost:0},
   {phase:"Study.com", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Month 7 · incl. · Study.com CS 110 (Intro to Cybersecurity) · moved from UoPeople, needs the 75% cap exception", done:false, cost:0},
-  {phase:"Study.com", platform:"study", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Month 7 · incl. · Study.com CS 311 (Artificial Intelligence) · moved from UoPeople, needs the 75% cap exception", done:false, cost:0},
+  {phase:"Study.com", platform:"study", title:"Operating Systems 2", code:"CS 3307", meta:"Month 7 · incl. · Study.com CS 305 (Operating Systems) · proctored at UoPeople, so transferring avoids the exam · needs the 75% cap room", done:false, cost:180},
 
   // Extra ACE-recommended credit, completed but not yet slotted into the 36-course plan
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals · could help close the 4-course/120-credit gap — confirm mapping with advisor · audit posted CS 1111, CS 2204 and EXT-MAJ 1001 (9 credits)", done:true, cost:0},
@@ -337,10 +338,10 @@ const COURSES = [
   // UoPeople
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Online Education Strategies", code:"UNIV 1001", meta:"Term 1 · $180", done:false, cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Web Programming 2", code:"CS 3305", meta:"Term 1 · $180", done:false, cost:180},
-  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Operating Systems 2", code:"CS 3307", meta:"Term 2 · $180", done:false, cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Comparative Programming Languages", code:"CS 4402", meta:"Term 3 · $180", done:false, cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Data Mining and Machine Learning", code:"CS 4407", meta:"Term 3 · $180", done:false, cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Analysis of Algorithms", code:"CS 3304", meta:"Term 2 · $180", done:false, cost:180},
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Term 2 · $180 · moved back from Study.com to make room for CS 3307", done:false, cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Advanced Networking & Security", code:"CS 4404", meta:"Term 4 · $180", done:false, cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Big Data", code:"CS 3440", meta:"Term 4 · $180", done:false, cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Elective — Software Engineering 2", code:"CS 4403", meta:"Term 5 · $180", done:false, cost:180},
