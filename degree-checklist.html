@@ -280,7 +280,7 @@
     <div class="flag-title">⚠️ Confirm with UoPeople advisor before finishing the plan</div>
     <ul>
       <li><b>Transfer cap:</b> default is 50% of the degree (60 credits / 20 courses). The 75% ceiling (90 credits / 30 courses) needs special approval — not automatic. This plan transfers 23 courses (69 credits), above the default.</li>
-      <li><b>Audit of 20 Oct 2026: 57 of 120 credits posted</b> (Major 27/60, General Education 21/30, Electives 9/30). Still not posted: Java (CS 1103, should map, ask the transfer office) and Public Speaking (Social Science). Critical Thinking and Project Management are not needed. Remaining: 21 courses, 11 expected by transfer (90 transfer credits total, exactly the ceiling) and 10 direct at UoPeople.</li>
+      <li><b>Audit of 20 Oct 2026: 57 of 120 credits posted</b> (Major 27/60, General Education 21/30, Electives 9/30). Still not posted: Java (CS 1103, should map, ask the transfer office) and Public Speaking. Sophia Introduction to Sociology was completed 21 Oct (97%) and is on the new transcript (54 credits) submitted to UoPeople. It covers Social Science. Critical Thinking and Project Management are not needed. Remaining: 21 courses, 11 expected by transfer (90 transfer credits total, exactly the ceiling) and 10 direct at UoPeople.</li>
       <li><b>Study.com status:</b> Calculus posted as MATH 1211 and Networking posted as Major Elective 2 (EXT-MAJ 1002), so CS 3308 is no longer needed. Discrete Mathematics and Operating Systems 1 are passed and go in the next request. College Saver Pro allows 3 courses at a time.</li>
       <li><b>Required courses still uncovered:</b> CS 1102 is now posted (Python counted twice). COM 2001 Professional Communication remains, and Study.com Business 113, Business 313 or Communications 102 fills it. UoPeople's own Study.com pathway lists 81 transfer credits, above the 60-credit default cap, so cite it in the exception request. CS 2401, CS 3340 and CS 3307 run on Study.com to use the 90-credit ceiling. CS 3307 is there because it is proctored, and CS 4408 moved back to UoPeople to make room.</li>
       <li><b>Proctored courses (8 required):</b> 3 are posted (CS 2205, MATH 1201, MATH 1280). Study.com covers 4 more (CS 2301, 3303, 3306, 3307). CS 3305, 4402 and 4407 are required, proctored, and have no Study.com equivalent, so you take those 3 at UoPeople. That gives 10 total, or 6 if Study.com credit does not count toward the counter.</li>
@@ -316,7 +316,7 @@ const COURSES = [
   {phase:"Sophia.com — Next Steps", platform:"sophia", title:"Art History I (Humanities GE 2)", code:"Gen Ed", meta:"Month 3 · $79 · ACE transcript: Pass, issued 4 Oct 2026 · ✓ posted on UoPeople audit 14 Oct", done:true, cost:79},
   {phase:"Sophia.com — Next Steps", platform:"sophia", title:"Web Programming 1", code:"CS 2205", meta:"Month 4 · $79 · ✓ posted on UoPeople audit 14 Oct", done:true, cost:79},
   {phase:"Sophia.com — Next Steps", platform:"sophia", title:"Civilization Studies GE (Approaches to Studying Religions)", code:"Gen Ed", meta:"Month 5 · $79 · swapped from Art History II (that's Humanities, not Civilization Studies) · ✓ posted on UoPeople audit 14 Oct", done:true, cost:79},
-  {phase:"Sophia.com — Next Steps", platform:"sophia", title:"Introduction to Sociology (Social Sci GE)", code:"SOC 1502", meta:"$79 · needed only if Public Speaking never posts · Social Science still needs 3 credits", done:false, cost:79},
+  {phase:"Sophia.com — Next Steps", platform:"sophia", title:"Introduction to Sociology (Social Sci GE)", code:"SOC 1502", meta:"$79 · completed 21 Oct (97%) · on Sophia transcript of 21 Oct, submitted to UoPeople · covers the Social Science slot", done:true, cost:79},
 
   // Study.com
   {phase:"Study.com", platform:"study", title:"Calculus I", code:"MATH 1211", meta:"Study.com Math 104 · passed 91% · ✓ posted 21 Oct as MATH 1211 (3 credits)", done:true, cost:0},
@@ -356,7 +356,7 @@ const REQ_KEY = "uopeople-checklist-requirements-v1";
 const SEED_KEY = "uopeople-checklist-seedversion-v1";
 // Bump this whenever courses are marked done in the COURSES list above.
 // On the next visit, anything marked done here gets checked once (you can still uncheck it afterward).
-const SEED_VERSION = "2026-10-16";
+const SEED_VERSION = "2026-10-21";
 let state = {};          // { "phase|title": true/false }
 let progress = {};       // { "phase|title": 0-100 }
 let prevProgress = {};   // { "phase|title": 0-100 } — progress to restore if a done course gets unchecked
