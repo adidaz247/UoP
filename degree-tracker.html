@@ -183,6 +183,7 @@
     white-space: nowrap;
     font-family: "IBM Plex Mono", monospace;
   }
+  .badge-proctored { border-color: var(--accent-study); color: var(--accent-study); }
   .item-alt {
     font-size: 0.74rem;
     color: var(--accent-study);
@@ -289,6 +290,7 @@
 </div>
 
 <script>
+const PROCTORED = new Set(['CS 2205','CS 2301','CS 3303','CS 3305','CS 3306','CS 3307','CS 4402','CS 4407','MATH 1201','MATH 1280']); // proctored per the UoPeople degree audit
 const CATALOG = [
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"College Algebra", code:"MATH 1201", meta:"Completed", cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"English Composition 2", code:"ENGL 1102", meta:"Completed", cost:0},
@@ -391,7 +393,7 @@ function render() {
           <div class="item-body">
             <div class="item-title">${item.title}</div>
             <div class="item-meta">
-              <span class="badge">${item.code}</span>
+              <span class="badge">${item.code}</span>${PROCTORED.has(item.code) ? '<span class="badge badge-proctored">Proctored</span>' : ""}
               <span>${item.meta}</span>
             </div>
             ${item.alt ? `<div class="item-alt">Study.com alt: ${item.alt.replace(/^Study\\.com:\\s*/, "")} — use if faster</div>` : ""}
