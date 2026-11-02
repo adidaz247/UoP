@@ -323,13 +323,13 @@ const COURSES = [
   {phase:"Study.com", platform:"study", title:"Communications and Networking", code:"CS 2204", meta:"Study.com CS 108 · passed 92% · ✓ posted 21 Oct as Major Elective 2 (EXT-MAJ 1002). CS 2204 had already posted from Google IT", done:true, cost:0},
   {phase:"Study.com", platform:"study", title:"Discrete Mathematics", code:"MATH 1302", meta:"Study.com Math 108 · passed 97% · ✓ posted on UoPeople audit 2 Nov", done:true, cost:0, reqSeed:{total:12, done:5}},
   {phase:"Study.com", platform:"study", title:"Operating Systems 1", code:"CS 2301", meta:"Study.com CS 105 · passed 93% · ✓ posted on UoPeople audit 2 Nov", done:true, cost:0, reqSeed:{total:10, done:0}},
-  {phase:"Study.com", platform:"study", title:"Digital Electronics & Computer Architecture", code:"CS 1105", meta:"Month 6 · $235 · Study.com CS 306 (Computer Architecture)", done:false, cost:235},
+  {phase:"Study.com", platform:"study", title:"Digital Electronics & Computer Architecture", code:"CS 1105", meta:"Study.com CS 306 (Computer Architecture) · passed 81% · not submitted yet", done:true, cost:235},
   {phase:"Study.com", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Study.com CS 201 (Data Structures & Algorithms) · passed 95% on 19 Oct · ✓ posted on UoPeople audit 2 Nov", done:true, cost:0},
   {phase:"Study.com", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Study.com CS 303 (Database Management) · passed 96% on 22 Oct · ✓ posted on UoPeople audit 2 Nov", done:true, cost:0},
-  {phase:"Study.com", platform:"study", title:"Professional Communication", code:"COM 2001", meta:"Month 7 · $235 (2nd Study.com month) · Study.com Business 113, Business 313 or Communications 102 · fills the COM 2001 gap", done:false, cost:235},
-  {phase:"Study.com", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Month 7 · incl. · Study.com CS 307 · moved from UoPeople, needs the 75% cap exception", done:false, cost:0},
-  {phase:"Study.com", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Month 7 · incl. · Study.com CS 110 (Intro to Cybersecurity) · moved from UoPeople, needs the 75% cap exception", done:false, cost:0},
-  {phase:"Study.com", platform:"study", title:"Operating Systems 2", code:"CS 3307", meta:"Month 7 · incl. · Study.com CS 305 (Operating Systems) · proctored at UoPeople, so transferring avoids the exam · needs the 75% cap room", done:false, cost:180},
+  {phase:"Study.com", platform:"study", title:"Professional Communication", code:"COM 2001", meta:"Study.com Business 313 (Organizational Communication) · passed 86% · not submitted yet", done:true, cost:235},
+  {phase:"Study.com", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Study.com CS 307 (Software Engineering) · enrolled, 0 of 16 requirements done", done:false, cost:0},
+  {phase:"Study.com", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Study.com CS 110 (Intro to Cybersecurity) · enrolled, 13 of 14 requirements done", done:false, cost:0},
+  {phase:"Study.com", platform:"study", title:"Operating Systems 2", code:"CS 3307", meta:"Study.com CS 305 (Operating Systems) · enrolled, 0 of 14 requirements done · proctored at UoPeople, so transferring avoids the exam", done:false, cost:180},
 
   // Extra ACE-recommended credit, completed but not yet slotted into the 36-course plan
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals · could help close the 4-course/120-credit gap — confirm mapping with advisor · audit posted CS 1111, CS 2204 and EXT-MAJ 1001 (9 credits)", done:true, cost:0},
@@ -356,7 +356,7 @@ const REQ_KEY = "uopeople-checklist-requirements-v1";
 const SEED_KEY = "uopeople-checklist-seedversion-v1";
 // Bump this whenever courses are marked done in the COURSES list above.
 // On the next visit, anything marked done here gets checked once (you can still uncheck it afterward).
-const SEED_VERSION = "2026-10-26";
+const SEED_VERSION = "2026-11-02";
 let state = {};          // { "phase|title": true/false }
 let progress = {};       // { "phase|title": 0-100 }
 let prevProgress = {};   // { "phase|title": 0-100 } — progress to restore if a done course gets unchecked
