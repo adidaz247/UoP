@@ -276,7 +276,7 @@
   <div class="flag-card">
     <div class="flag-title">Confirm with UoPeople advisor before finishing the plan</div>
     <ul>
-      <li><b>Audit of 2 Nov 2026:</b> 72 of 120 credits posted (Major 39/60, General Education 24/30, Electives 9/30). Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted from Study.com. Java (CS 1103) still has not posted. The advisor was emailed on 2 Nov and Study.com CS 115 (Java) is enrolled as a backup. Public Speaking, Critical Thinking and Project Management are not needed.</li>
+      <li><b>Audit of 2 Nov 2026:</b> 72 of 120 credits posted (Major 39/60, General Education 24/30, Electives 9/30). Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted from Study.com. CS 1103 is still open. The advisor replied on 3 Nov that Sophia Java posted as CS 1102, because Programming 1 was not yet fulfilled. Study.com CS 115 (Java) is enrolled to cover CS 1103. Public Speaking, Critical Thinking and Project Management are not needed.</li>
       <li><b>Study.com:</b> CS 306 (CS 1105) passed 81% and Business 313 (COM 2001) passed 86%, not submitted yet. CS 110 (CS 3340) is 13 of 14 done. CS 307 (CS 2401) and CS 305 (CS 3307) are enrolled.</li>
       <li><b>Proctored courses (8 required):</b> 6 posted, so transferred Study.com credit counts: CS 2205, MATH 1201, MATH 1280, CS 2301, CS 3303, CS 3306. CS 3307 from Study.com makes 7. The 8th comes from a direct course (CS 3305, 4402 or 4407, all required anyway). Confirm with the advisor which of them count.</li>
       <li><b>Transfer cap:</b> default is 50% (60 credits). The 75% ceiling (90 credits) may apply automatically under the Sept 2026 policy, so confirm with the advisor. The plan reaches exactly 90 transfer credits if everything posts.</li>
@@ -295,8 +295,8 @@ const PROCTORED = new Set(['CS 2205','CS 2301','CS 3303','CS 3305','CS 3306','CS
 const CATALOG = [
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"College Algebra", code:"MATH 1201", meta:"Completed", cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"English Composition 2", code:"ENGL 1102", meta:"Completed", cost:0},
-  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming Fundamentals + 1", code:"CS 1101/1102", meta:"Completed", cost:0},
-  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming 2", code:"CS 1103", meta:"Completed · $0 · ACE SOPH-0062 · NOT posted on the 2 Nov audit. Advisor emailed 2 Nov. Study.com CS 115 enrolled as a backup", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming Fundamentals", code:"CS 1101", meta:"Completed · $0 · Sophia Python · ✓ posted on UoPeople audit 14 Oct", cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming 1 (Sophia Java)", code:"CS 1102", meta:"Completed · $0 · ACE SOPH-0062 · ✓ posted as CS 1102 per the advisor on 3 Nov. It fills Programming 1, so it cannot also count as CS 1103", cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Databases 1", code:"CS 2203", meta:"Completed", cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Public Speaking (Social Sci GE)", code:"Gen Ed", meta:"Completed · not posted on audit", cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"U.S. Government (Social Sci GE)", code:"Gen Ed", meta:"Completed", cost:0},
@@ -323,7 +323,7 @@ const CATALOG = [
   {phase:"Study.com", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Study.com CS 307 · enrolled, 0 of 16 done", cost:0},
   {phase:"Study.com", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Study.com CS 110 · enrolled, 13 of 14 done", cost:0},
   {phase:"Study.com", platform:"study", title:"Operating Systems 2", code:"CS 3307", meta:"Study.com CS 305 · enrolled, 0 of 14 done", cost:180},
-  {phase:"Study.com", platform:"study", title:"Programming 2 (Java, backup for CS 1103)", code:"CS 1103", meta:"Study.com CS 115 · enrolled 3 Nov as a backup if Sophia Java is rejected · advisor emailed 2 Nov", cost:0},
+  {phase:"Study.com", platform:"study", title:"Programming 2 (Study.com Java)", code:"CS 1103", meta:"Study.com CS 115 (Programming in Java) · enrolled 3 Nov · now the route for CS 1103 because Sophia Java posted as CS 1102 · confirm with the advisor that it posts as CS 1103", cost:0},
 
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals", cost:0},
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Introduction to Nutrition (Sophia)", code:"ACE SOPH-0063", meta:"3 ACE credits", cost:0},

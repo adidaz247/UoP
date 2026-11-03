@@ -280,9 +280,9 @@
     <div class="flag-title">⚠️ Confirm with UoPeople advisor before finishing the plan</div>
     <ul>
       <li><b>Transfer cap:</b> default is 50% of the degree (60 credits / 20 courses). The 75% ceiling (90 credits / 30 courses) needs special approval — not automatic. This plan transfers 23 courses (69 credits), above the default.</li>
-      <li><b>Audit of 2 Nov 2026: 72 of 120 credits posted</b> (Major 39/60, General Education 24/30, Electives 9/30). Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted from Study.com. The proctored counter moved from 3/8 to 6/8, so transferred Study.com credit counts. Proctored so far: CS 2205, MATH 1201, MATH 1280, CS 2301, CS 3303, CS 3306. CS 3307 from Study.com would make 7/8. The 8th must come from a direct course (CS 3305, 4402 or 4407, all required anyway). Still not posted: Java (CS 1103). The advisor was emailed on 2 Nov and Study.com CS 115 (Java) is enrolled as a backup. Remaining: 16 courses, 6 by transfer (90 transfer credits total, exactly the ceiling) and 10 direct at UoPeople.</li>
-      <li><b>Study.com status:</b> Calculus and Networking posted on 21 Oct. Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted on 2 Nov. CS 306 (CS 1105, 81%) and Business 313 (COM 2001, 86%) are passed and not submitted yet. Enrolled: CS 110 (CS 3340, 13 of 14 done), CS 307 (CS 2401), CS 305 (CS 3307) and CS 115 (Java, backup for CS 1103). College Saver Pro allows 3 courses at a time</li>
-      <li><b>Required courses still uncovered:</b> Java (CS 1103) has not posted. The advisor was emailed on 2 Nov and Study.com CS 115 is the backup. COM 2001 is covered by Business 313 once submitted. UNIV 1001 is taken at UoPeople. If CS 115 replaces Sophia Java, the plan still reaches exactly 90 transfer credits</li>
+      <li><b>Audit of 2 Nov 2026: 72 of 120 credits posted</b> (Major 39/60, General Education 24/30, Electives 9/30). Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted from Study.com. The proctored counter moved from 3/8 to 6/8, so transferred Study.com credit counts. Proctored so far: CS 2205, MATH 1201, MATH 1280, CS 2301, CS 3303, CS 3306. CS 3307 from Study.com would make 7/8. The 8th must come from a direct course (CS 3305, 4402 or 4407, all required anyway). CS 1103 is still open. The advisor replied on 3 Nov that Sophia Java posted as CS 1102, because Programming 1 was not yet fulfilled. Study.com CS 115 (Java) is enrolled to cover CS 1103. Remaining: 16 courses, 6 by transfer (90 transfer credits total, exactly the ceiling) and 10 direct at UoPeople.</li>
+      <li><b>Study.com status:</b> Calculus and Networking posted on 21 Oct. Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted on 2 Nov. CS 306 (CS 1105, 81%) and Business 313 (COM 2001, 86%) are passed and not submitted yet. Enrolled: CS 110 (CS 3340, 13 of 14 done), CS 307 (CS 2401), CS 305 (CS 3307) and CS 115 (Java, for CS 1103). College Saver Pro allows 3 courses at a time</li>
+      <li><b>Required courses still uncovered:</b> CS 1103 is still open. Sophia Java posted as CS 1102, so Study.com CS 115 is enrolled to cover CS 1103. COM 2001 is covered by Business 313 once submitted. UNIV 1001 is taken at UoPeople. CS 1103 is one of the 6 remaining transfer courses, so the plan still reaches exactly 90 transfer credits</li>
       <li><b>Proctored courses (8 required):</b> 6 are posted (CS 2205, MATH 1201, MATH 1280, CS 2301, CS 3303, CS 3306), so Study.com credit counts. CS 3307 from Study.com makes 7. The 8th comes from CS 3305, 4402 or 4407, which you take at UoPeople anyway</li>
       <li><b>Fees updated:</b> UoPeople assessment fee is $180/course per the current catalog (this checklist reflects that; it was originally budgeted at $160).</li>
     </ul>
@@ -300,8 +300,8 @@ const COURSES = [
   // Sophia - already completed
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"College Algebra", code:"MATH 1201", meta:"Completed · $0 · ✓ posted on UoPeople audit 14 Oct", done:true, cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"English Composition 2", code:"ENGL 1102", meta:"Completed · $0 · ✓ posted on UoPeople audit 14 Oct", done:true, cost:0},
-  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming Fundamentals + 1", code:"CS 1101/1102", meta:"Completed · $0 · ✓ posted on UoPeople audit 14 Oct", done:true, cost:0},
-  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming 2", code:"CS 1103", meta:"Completed · $0 · ACE SOPH-0062 · NOT posted on the 2 Nov audit. Advisor emailed 2 Nov. Study.com CS 115 enrolled as a backup", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming Fundamentals", code:"CS 1101", meta:"Completed · $0 · Sophia Python · ✓ posted on UoPeople audit 14 Oct", done:true, cost:0},
+  {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Programming 1 (Sophia Java)", code:"CS 1102", meta:"Completed · $0 · ACE SOPH-0062 · ✓ posted as CS 1102 per the advisor on 3 Nov. It fills Programming 1, so it cannot also count as CS 1103", done:true, cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Databases 1", code:"CS 2203", meta:"Completed · $0 · ✓ posted on UoPeople audit 14 Oct", done:true, cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"Public Speaking (Social Sci GE)", code:"Gen Ed", meta:"Completed · $0 · ⚠ NOT posted on 14 Oct audit. Social Science still needs 3 credits", done:true, cost:0},
   {phase:"Sophia.com — Already Completed", platform:"sophia", title:"U.S. Government (Social Sci GE)", code:"Gen Ed", meta:"Completed · $0 · ✓ posted on UoPeople audit 14 Oct", done:true, cost:0},
@@ -330,7 +330,7 @@ const COURSES = [
   {phase:"Study.com", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Study.com CS 307 (Software Engineering) · enrolled, 0 of 16 requirements done", done:false, cost:0},
   {phase:"Study.com", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Study.com CS 110 (Intro to Cybersecurity) · enrolled, 13 of 14 requirements done", done:false, cost:0},
   {phase:"Study.com", platform:"study", title:"Operating Systems 2", code:"CS 3307", meta:"Study.com CS 305 (Operating Systems) · enrolled, 0 of 14 requirements done · proctored at UoPeople, so transferring avoids the exam", done:false, cost:180},
-  {phase:"Study.com", platform:"study", title:"Programming 2 (Java, backup for CS 1103)", code:"CS 1103", meta:"Study.com CS 115 (Programming in Java) · enrolled 3 Nov as a backup in case UoPeople does not post Sophia Java (SOPH-0062) · advisor emailed 2 Nov · only counts if Sophia Java is rejected", done:false, cost:0},
+  {phase:"Study.com", platform:"study", title:"Programming 2 (Study.com Java)", code:"CS 1103", meta:"Study.com CS 115 (Programming in Java) · enrolled 3 Nov · now the route for CS 1103 because Sophia Java posted as CS 1102 · confirm with the advisor that it posts as CS 1103", done:false, cost:0},
 
   // Extra ACE-recommended credit, completed but not yet slotted into the 36-course plan
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals · could help close the 4-course/120-credit gap — confirm mapping with advisor · audit posted CS 1111, CS 2204 and EXT-MAJ 1001 (9 credits)", done:true, cost:0},
@@ -357,7 +357,7 @@ const REQ_KEY = "uopeople-checklist-requirements-v1";
 const SEED_KEY = "uopeople-checklist-seedversion-v1";
 // Bump this whenever courses are marked done in the COURSES list above.
 // On the next visit, anything marked done here gets checked once (you can still uncheck it afterward).
-const SEED_VERSION = "2026-11-02";
+const SEED_VERSION = "2026-11-03";
 let state = {};          // { "phase|title": true/false }
 let progress = {};       // { "phase|title": 0-100 }
 let prevProgress = {};   // { "phase|title": 0-100 } — progress to restore if a done course gets unchecked
