@@ -276,10 +276,10 @@
   <div class="flag-card">
     <div class="flag-title">Confirm with UoPeople advisor before finishing the plan</div>
     <ul>
-      <li><b>Audit of 2 Nov 2026:</b> 72 of 120 credits posted (Major 39/60, General Education 24/30, Electives 9/30). Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted from Study.com. CS 1103 and CS 4408 move to Study.com. CS 112 (Programming in C++) is planned for CS 1103 and CS 311 (Artificial Intelligence) for CS 4408. The advisor said on 4 Nov that Study.com CS 115 cannot count for CS 1103 while Sophia Java sits on CS 1102, and UoPeople has not approved C++ for CS 1103. If every transfer posts, the plan reaches 93 transfer credits, 3 over the 90 ceiling. Public Speaking, Critical Thinking and Project Management are not needed.</li>
+      <li><b>Audit of 2 Nov 2026:</b> 72 of 120 credits posted (Major 39/60, General Education 24/30, Electives 9/30). Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted from Study.com. CS 1103 is taken directly at UoPeople. The advisor said on 4 Nov that Study.com CS 115 cannot count for CS 1103 while Sophia Java sits on CS 1102. CS 4408 moves to Study.com CS 311 (Artificial Intelligence), which Study.com lists for CS 4408. With CS 311 the plan reaches exactly 90 transfer credits. Public Speaking, Critical Thinking and Project Management are not needed.</li>
       <li><b>Study.com:</b> CS 306 (CS 1105) passed 81% and Business 313 (COM 2001) passed 86%, not submitted yet. CS 110 (CS 3340) is 13 of 14 done. CS 307 (CS 2401) and CS 305 (CS 3307) are enrolled.</li>
       <li><b>Proctored courses (8 required):</b> 6 posted, so transferred Study.com credit counts: CS 2205, MATH 1201, MATH 1280, CS 2301, CS 3303, CS 3306. CS 3307 from Study.com makes 7. The 8th comes from a direct course (CS 3305, 4402 or 4407, all required anyway). Confirm with the advisor which of them count.</li>
-      <li><b>Transfer cap:</b> UoPeople posted 72 transfer credits, already above the 60-credit default, so the 75% ceiling (90 credits) is in effect. With CS 112 and CS 311 the plan reaches 93. Ask the advisor whether 90 is a hard limit. If it is, drop CS 112 and take CS 1103 directly</li>
+      <li><b>Transfer cap:</b> UoPeople posted 72 transfer credits, already above the 60-credit default, so the 75% ceiling (90 credits) is in effect. The plan reaches exactly 90 with CS 311</li>
       <li><b>Fees:</b> UoPeople assessment fee is $180 per course. Study.com is $235 per month.</li>
     </ul>
   </div>
@@ -323,12 +323,12 @@ const CATALOG = [
   {phase:"Study.com", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Study.com CS 307 · enrolled, 0 of 16 done", cost:0},
   {phase:"Study.com", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Study.com CS 110 · enrolled, 13 of 14 done", cost:0},
   {phase:"Study.com", platform:"study", title:"Operating Systems 2", code:"CS 3307", meta:"Study.com CS 305 · enrolled, 0 of 14 done", cost:180},
-  {phase:"Study.com", platform:"study", title:"Programming 2 (Study.com C++)", code:"CS 1103", meta:"Study.com CS 112 (Programming in C++) · after CS 311, only once the advisor approves · needs advisor approval, since Study.com lists no course for CS 1103 and CS 115 cannot be used twice", cost:0},
-  {phase:"Study.com", platform:"study", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Study.com CS 311 (Artificial Intelligence) · PRIORITY, take next · listed by Study.com for CS 4408 · pushes transfer credits to the 90 ceiling", cost:0},
+  {phase:"Study.com", platform:"study", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Study.com CS 311 (Artificial Intelligence) · take next · listed by Study.com for CS 4408 · brings transfer credits to exactly 90", cost:0},
 
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals", cost:0},
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Introduction to Nutrition (Sophia)", code:"ACE SOPH-0063", meta:"3 ACE credits", cost:0},
 
+  {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Programming 2", code:"CS 1103", meta:"Term 1 · $180 · Sophia Java posted as CS 1102 and Study.com CS 115 cannot transfer for CS 1103 (advisor, 4 Nov)", cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Online Education Strategies", code:"UNIV 1001", meta:"Term 1 · $180", cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Web Programming 2", code:"CS 3305", meta:"Term 1 · $180", cost:180},
   {phase:"UoPeople — Must Take Directly", platform:"uop", title:"Comparative Programming Languages", code:"CS 4402", meta:"Term 3 · $180", cost:180},
