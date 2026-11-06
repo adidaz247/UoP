@@ -281,7 +281,7 @@
     <ul>
       <li><b>Transfer cap:</b> UoPeople posted 72 transfer credits, already above the 60-credit default, so the 75% ceiling (90 credits) is in effect. The plan reaches exactly 90 with CS 311</li>
       <li><b>Audit of 2 Nov 2026: 72 of 120 credits posted</b> (Major 39/60, General Education 24/30, Electives 9/30). Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted from Study.com. The proctored counter moved from 3/8 to 6/8, so transferred Study.com credit counts. Proctored so far: CS 2205, MATH 1201, MATH 1280, CS 2301, CS 3303, CS 3306. CS 3307 from Study.com would make 7/8. The 8th must come from a direct course (CS 3305, 4402 or 4407, all required anyway). CS 1103 is taken directly at UoPeople. The advisor said on 4 Nov that Study.com CS 115 cannot count for CS 1103 while Sophia Java sits on CS 1102. CS 4408 moves to Study.com CS 311 (Artificial Intelligence), which Study.com lists for CS 4408. With CS 311 the plan reaches exactly 90 transfer credits. Remaining: 16 courses, 6 by transfer (90 transfer credits total, exactly the ceiling) and 10 direct at UoPeople.</li>
-      <li><b>Study.com status:</b> Calculus and Networking posted on 21 Oct. Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted on 2 Nov. CS 306 (CS 1105, 81%) and Business 313 (COM 2001, 86%) are passed and not submitted yet. Enrolled: CS 110 (CS 3340, 13 of 14 done), CS 307 (CS 2401) and CS 305 (CS 3307). Planned next: CS 311 (AI, for CS 4408). College Saver Pro allows 3 courses at a time</li>
+      <li><b>Study.com status:</b> Calculus and Networking posted on 21 Oct. Discrete Mathematics, Operating Systems 1, Data Structures and Databases 2 posted on 2 Nov. CS 306 (CS 1105, 81%) and Business 313 (COM 2001, 86%) are passed and not submitted yet. All Study.com courses are passed: CS 306, Business 313, CS 307, CS 110, CS 305 and CS 311. Next step: submit one Study.com transcript request with all 6 courses (18 credits, 90 transfer credits in total). College Saver Pro allows 3 courses at a time</li>
       <li><b>Required courses still uncovered:</b> CS 1103 is taken directly at UoPeople. The advisor said on 4 Nov that Study.com CS 115 cannot count for CS 1103 while Sophia Java sits on CS 1102. CS 4408 moves to Study.com CS 311 (Artificial Intelligence), which Study.com lists for CS 4408. With CS 311 the plan reaches exactly 90 transfer credits. COM 2001 is covered by Business 313 once submitted. UNIV 1001 is also taken at UoPeople</li>
       <li><b>Proctored courses (8 required):</b> 6 are posted (CS 2205, MATH 1201, MATH 1280, CS 2301, CS 3303, CS 3306), so Study.com credit counts. CS 3307 from Study.com makes 7. The 8th comes from CS 3305, 4402 or 4407, which you take at UoPeople anyway</li>
       <li><b>Fees updated:</b> UoPeople assessment fee is $180/course per the current catalog (this checklist reflects that; it was originally budgeted at $160).</li>
@@ -327,10 +327,10 @@ const COURSES = [
   {phase:"Study.com", platform:"study", title:"Data Structures", code:"CS 3303", meta:"Study.com CS 201 (Data Structures & Algorithms) · passed 95% on 19 Oct · ✓ posted on UoPeople audit 2 Nov", done:true, cost:0},
   {phase:"Study.com", platform:"study", title:"Databases 2", code:"CS 3306", meta:"Study.com CS 303 (Database Management) · passed 96% on 22 Oct · ✓ posted on UoPeople audit 2 Nov", done:true, cost:0},
   {phase:"Study.com", platform:"study", title:"Professional Communication", code:"COM 2001", meta:"Study.com Business 313 (Organizational Communication) · passed 86% · not submitted yet", done:true, cost:235},
-  {phase:"Study.com", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Study.com CS 307 (Software Engineering) · enrolled, 0 of 16 requirements done", done:false, cost:0},
-  {phase:"Study.com", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Study.com CS 110 (Intro to Cybersecurity) · enrolled, 13 of 14 requirements done", done:false, cost:0},
-  {phase:"Study.com", platform:"study", title:"Operating Systems 2", code:"CS 3307", meta:"Study.com CS 305 (Operating Systems) · enrolled, 0 of 14 requirements done · proctored at UoPeople, so transferring avoids the exam", done:false, cost:180},
-  {phase:"Study.com", platform:"study", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Study.com CS 311 (Artificial Intelligence) · take next · listed by Study.com for CS 4408 · brings transfer credits to exactly 90", done:false, cost:0},
+  {phase:"Study.com", platform:"study", title:"Software Engineering 1", code:"CS 2401", meta:"Study.com CS 307 (Software Engineering) · passed 95% · not submitted yet", done:true, cost:0},
+  {phase:"Study.com", platform:"study", title:"Elective — Systems & App Security", code:"CS 3340", meta:"Study.com CS 110 (Intro to Cybersecurity) · passed 94% · not submitted yet", done:true, cost:0},
+  {phase:"Study.com", platform:"study", title:"Operating Systems 2", code:"CS 3307", meta:"Study.com CS 305 (Operating Systems) · passed 91% · not submitted yet · proctored at UoPeople, so transferring avoids the exam", done:true, cost:180},
+  {phase:"Study.com", platform:"study", title:"Elective — Artificial Intelligence", code:"CS 4408", meta:"Study.com CS 311 (Artificial Intelligence) · passed 97% · not submitted yet · listed by Study.com for CS 4408 · brings transfer credits to exactly 90", done:true, cost:0},
 
   // Extra ACE-recommended credit, completed but not yet slotted into the 36-course plan
   {phase:"Extra Credit — Not Yet Applied to a Slot", platform:"sophia", title:"Google IT Support Certificate (Coursera)", code:"ACE GOOG-0001", meta:"12 ACE credits: 6 computer info systems, 3 networking, 3 cybersecurity fundamentals · could help close the 4-course/120-credit gap — confirm mapping with advisor · audit posted CS 1111, CS 2204 and EXT-MAJ 1001 (9 credits)", done:true, cost:0},
@@ -357,7 +357,7 @@ const REQ_KEY = "uopeople-checklist-requirements-v1";
 const SEED_KEY = "uopeople-checklist-seedversion-v1";
 // Bump this whenever courses are marked done in the COURSES list above.
 // On the next visit, anything marked done here gets checked once (you can still uncheck it afterward).
-const SEED_VERSION = "2026-11-04b";
+const SEED_VERSION = "2026-11-05";
 let state = {};          // { "phase|title": true/false }
 let progress = {};       // { "phase|title": 0-100 }
 let prevProgress = {};   // { "phase|title": 0-100 } — progress to restore if a done course gets unchecked
